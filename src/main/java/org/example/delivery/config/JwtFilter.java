@@ -1,11 +1,14 @@
 package org.example.delivery.config;
 
 import io.jsonwebtoken.Claims;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.example.delivery.domain.user.UserRepository;
+import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,6 +21,8 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -42,6 +47,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(!jwtUtil.validateToken(token)) {
             throw new IllegalArgumentException("유효하지 않은 토큰");
+        }
+
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        if(user.getIsDeleted()) {
+            throw new EntityNotFoundException("비활성화 된 계정");
         }
 
         Claims claims = jwtUtil.getClaims(token);

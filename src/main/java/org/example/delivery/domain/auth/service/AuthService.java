@@ -35,6 +35,10 @@ public class AuthService {
             throw new IllegalArgumentException("잘못된 비밀번호");
         }
 
+        if(user.getIsDeleted()) {
+            throw new IllegalArgumentException("비활성화된 계정");
+        }
+
         String token = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
         return new LoginResponseDto(token);
