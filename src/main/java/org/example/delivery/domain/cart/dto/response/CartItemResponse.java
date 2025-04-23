@@ -12,5 +12,5 @@ public class CartItemResponse {
     private Long menuId;
     private String menuName;
     private int quantity;       //수량
-    private int priceSnapshot;  //장바구니 담겼을 시점의 가격
+    private long priceSnapshot;  //장바구니 담겼을 시점의 가격
 }

@@ -15,5 +15,5 @@ public class CreateCartItemRequest {
     private Long menuId;    //메뉴 아이디
 
     @NotNull @Min(1)
-    private Long quantity;  //수량
+    private int quantity;  //수량
 }

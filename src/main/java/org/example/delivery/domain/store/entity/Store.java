@@ -20,6 +20,8 @@ public class Store {
     @ManyToOne
     private User owner;
 
+    private String name;
+
     private LocalTime openingTime;
 
     private LocalTime closing_time;
@@ -28,4 +30,7 @@ public class Store {
 
     private Long minOrderValue;
 
+    public boolean isOverMinOrderValue(Long totalPrice){
+        return totalPrice >= this.minOrderValue;
+    }
 }
