@@ -41,4 +41,14 @@ public class OrderService {
         return OrderResponseDto.toDto(order);
     }
 
+    @Transactional(readOnly = true)
+    public OrderResponseDto findOrder(Long userId,Long orderId) {
+        Order order = orderRepository.findById(orderId).
+                orElseThrow(() -> new NotFoundException("해당 주문을 찾을 수 없습니다."));
+        if(!userId.equals(order.getUser().getId())){
+            throw new AccessDeniedException("본인의 주문만 조회할 수 있습니다.");
+        }
+        return OrderResponseDto.toDto(order);
+    }
+
 }

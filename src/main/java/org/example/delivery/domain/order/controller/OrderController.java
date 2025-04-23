@@ -27,5 +27,15 @@ public class OrderController {
         OrderResponseDto createOrder = orderService.createOrder(userId, dto);
         return new ResponseEntity<>(createOrder, HttpStatus.CREATED);
     }
+    //주문단건조회(본인 주문건만 조회가능)
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<OrderResponseDto> findOrder(HttpServletRequest request,
+                                                     @PathVariable Long orderId){
+
+        Long userId = (Long) request.getAttribute("userId");
+        OrderResponseDto findOrder = orderService.findOrder(userId, orderId);
+        return new ResponseEntity<>(findOrder,HttpStatus.OK);
+    }
+
 
 }
