@@ -20,6 +20,8 @@ public class Store {
     @ManyToOne
     private User owner;
 
+    private String name;
+
     private LocalTime openingTime;
 
     private LocalTime closing_time;
