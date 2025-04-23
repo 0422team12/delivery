@@ -27,15 +27,42 @@ public class Order {
     @ManyToOne
     private Store store;
 
-    @OneToOne
+    @ManyToOne
     private Menu menu;
 
     private String address;
 
-//    private Enum status;
+    private int quantity;
+    private int price;
+    private int totalPrice;
 
-    private LocalDateTime ordered_at;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
-    private LocalDateTime delivered_at;
+    private LocalDateTime orderedAt;
+    private LocalDateTime deliveredAt;
 
+    public enum Status{
+        PENDING,
+        COOKING,
+        DELIVERING,
+        DELIVERED,
+        CANCELED
+    }
+
+    public static Order of(User user,Store store,Menu menu,int quantity,int priceSnapshot,String address){
+        Order order = new Order();
+        order.user = user;
+        order.store = store;
+        order.menu = menu;
+        order.quantity = quantity;
+        order.price = priceSnapshot;
+        order.totalPrice = quantity * priceSnapshot;
+        order.address = address;
+        order.status = Status.PENDING;
+        order.orderedAt = LocalDateTime.now();
+        return order;
+    }
 }
+
+
