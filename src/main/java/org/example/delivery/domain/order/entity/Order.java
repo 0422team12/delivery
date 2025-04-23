@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,14 +31,11 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItem;
 
     private String address;
 
-    private int quantity;
-    private int price;
     private int totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -58,21 +57,27 @@ public class Order {
     }
 
     public void updateStatus(String status) {
+        if (this.status.equals(Status.CANCELED) || this.status.equals(Status.DELIVERED)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 주문은 변경할 수 없습니다.");
+        }
         this.status = Status.valueOf(status.toUpperCase()); //입력받은 문자열을 enum으로 변경
+
+        if (this.status.equals(Status.DELIVERED)) { //배달완료시 배달시간 기록
+            this.deliveredAt = LocalDateTime.now();
+        }
     }
 
 
-    public static Order of(User user, Store store, Menu menu, int quantity, int priceSnapshot, String address) {
+    public static Order of(User user, Store store, List<OrderItem> orderItem, String address) {
         Order order = new Order();
         order.user = user;
         order.store = store;
-        order.menu = menu;
-        order.quantity = quantity;
-        order.price = priceSnapshot;
-        order.totalPrice = quantity * priceSnapshot;
+        order.orderItem = orderItem;
         order.address = address;
         order.status = Status.PENDING;
         order.orderedAt = LocalDateTime.now();
+
+        //order.totalPrice; 리스트금액 전부합산
         return order;
     }
 }

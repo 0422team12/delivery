@@ -12,7 +12,6 @@ public class FindAllOrderResponseDto {
 
     private final Long orderId;
     private final String storeName;
-    private final String menuName;
     private final String status;
     private final LocalDateTime orderedAt;
 
@@ -20,7 +19,6 @@ public class FindAllOrderResponseDto {
         return new FindAllOrderResponseDto(
                 order.getId(),
                 order.getStore().getName(),
-                order.getMenu().getName(),
                 order.getStatus(),
                 order.getOrderedAt()
         );

@@ -13,12 +13,11 @@ public class OrderResponseDto {
     private final Long userId;  //주문자 ID
     private final Long storeId; //식당 ID
 
-    private final String menuName;
-    private final int quantity;
-    private final int price;
+    private final List<OrderItemResponseDto> items;
     private final int totalPrice;
 
     private final String status;
+
     private final LocalDateTime orderedAt;
     private final LocalDateTime deliveredAt;
 
@@ -29,9 +28,7 @@ public class OrderResponseDto {
                 order.getId(), //주문번호
                 order.getUser().getId(), //user id
                 order.getStore().getId(),//가게 id
-                order.getMenu().getName(), //음식이름
-                order.getQuantity(),    //수량
-                order.getPrice(),      //금액
+                order.getOrderItem().stream().map(OrderItemResponseDto::toDto).toList(),
                 order.getTotalPrice(),  //총액
                 order.getStatus().name(),  //배달상태
                 order.getOrderedAt(),     //주문시간

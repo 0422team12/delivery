@@ -7,6 +7,7 @@ import org.example.delivery.domain.order.dto.request.OrderRequestDto;
 import org.example.delivery.domain.order.dto.response.FindAllOrderResponseDto;
 import org.example.delivery.domain.order.dto.response.OrderResponseDto;
 import org.example.delivery.domain.order.entity.Order;
+import org.example.delivery.domain.order.entity.OrderItem;
 import org.example.delivery.domain.order.repository.OrderRepository;
 import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
@@ -33,20 +34,22 @@ public class OrderService {
     public OrderResponseDto createOrder(Long userId, Long cartId, String address) {
         User user = userRepository.findById(userId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."));
+
         Cart cart = cartRepository.findById(cartId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "장바구니를 찾을 수 없습니다."));
+
         if (!cart.getUser().getId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "내 장바구니가 아닙니다.");
         }
-        CartItem cartItem = cartItemRepository.findByCartId(cart.getId()).
+        List<CartItem> cartItem = cartItemRepository.findAllByCartId(cart.getCartItem().getId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "장바구니에 담긴 메뉴가 없습니다.."));
 
-        Menu menu = cartItem.getMenu();
-        int quantity = cartItem.getQuantity();
-        int priceEach = cartItem.getPrice_snapshot();
+        //cartItem - > orderItem / cart_id,menu_id,quantity,price
+        List<OrderItem> orderItems = cartItem.stream().map(OrderItem::of).collect(Collectors.toList());
 
-        Order order = Order.of(user, cart.getStore(), menu, quantity, priceEach, address);
+        Order order = Order.of(user,cart.getStore(),orderItems,address);
         orderRepository.save(order);
+
         return OrderResponseDto.toDto(order);
     }
 
@@ -66,7 +69,7 @@ public class OrderService {
         if (findAllByUserId.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문한 이력이 없습니다.");
         }
-        return findAllByUserId.stream().map(FindAllOrderResponseDto::toDto).collect(Collectors.toList());
+        return findAllByUserId.stream().map(FindAllOrderResponseDto::toDto).toList();
     }
 
     @Transactional
