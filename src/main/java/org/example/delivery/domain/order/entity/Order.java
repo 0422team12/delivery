@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name="orders")
+@Table(name = "orders")
 @NoArgsConstructor
 public class Order {
 
@@ -22,12 +22,15 @@ public class Order {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
     private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 
     private String address;
@@ -42,19 +45,24 @@ public class Order {
     private LocalDateTime orderedAt;
     private LocalDateTime deliveredAt;
 
-    public enum Status{
+    public enum Status {
         PENDING,
-//        COOKING,
-//        DELIVERING,
+        COOKING,
+        DELIVERING,
         DELIVERED,
         CANCELED;
     }
 
     public void cancel() {
-        this.status=Status.CANCELED;
+        this.status = Status.CANCELED;
     }
 
-    public static Order of(User user,Store store,Menu menu,int quantity,int priceSnapshot,String address){
+    public void updateStatus(String status) {
+        this.status = Status.valueOf(status.toUpperCase()); //입력받은 문자열을 enum으로 변경
+    }
+
+
+    public static Order of(User user, Store store, Menu menu, int quantity, int priceSnapshot, String address) {
         Order order = new Order();
         order.user = user;
         order.store = store;

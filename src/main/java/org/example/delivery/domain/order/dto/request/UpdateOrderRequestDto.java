@@ -3,14 +3,10 @@ package org.example.delivery.domain.order.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 @Getter
 @RequiredArgsConstructor
-public class OrderRequestDto {
+public class UpdateOrderRequestDto {
 
     @NotBlank
-    private final Long cartId;
-
-    @NotBlank
-    private final String address;
+    private final String status;
 }
