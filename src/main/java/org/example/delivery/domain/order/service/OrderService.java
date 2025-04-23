@@ -8,6 +8,7 @@ import org.example.delivery.domain.order.dto.response.FindAllOrderResponseDto;
 import org.example.delivery.domain.order.dto.response.OrderResponseDto;
 import org.example.delivery.domain.order.entity.Order;
 import org.example.delivery.domain.order.repository.OrderRepository;
+import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,8 +50,8 @@ public class OrderService {
     public OrderResponseDto findOrder(Long userId, Long orderId) {
         Order order = orderRepository.findById(orderId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."));
-        if (!userId.equals(order.getUser().getId())) {
-            throw new AccessDeniedException("본인의 주문만 조회할 수 있습니다.");
+        if (!order.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
         }
         return OrderResponseDto.toDto(order);
     }
@@ -62,5 +63,19 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문한 이력이 없습니다.");
         }
         return findAllByUserId.stream().map(FindAllOrderResponseDto::toDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void cancelOrder(Long userId, Long orderId) {
+        Order order = orderRepository.findById(orderId).
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문이 없습니다."));
+
+        if(order.getStatus() != Order.Status.PENDING) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"요청중인 주문만 취소할 수 있습니다.");
+        }
+        if (!order.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 주문만 취소할 수 있습니다.");
+        }
+        order.cancel();
     }
 }

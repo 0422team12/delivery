@@ -41,5 +41,12 @@ public class OrderController {
         List<FindAllOrderResponseDto> findAllOrders = orderService.findAllOrders(userId);
         return new ResponseEntity<>(findAllOrders,HttpStatus.OK);
     }
+    //주문취소-order status PENDING 인 경우만 취소 가능
+    @DeleteMapping("/orders/{id}")
+    public ResponseEntity<Void> cancelOrder(@RequestAttribute("userId") Long userId,
+                                            @PathVariable Long orderId){
+        orderService.cancelOrder(userId,orderId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

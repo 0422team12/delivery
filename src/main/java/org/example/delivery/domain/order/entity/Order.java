@@ -44,10 +44,14 @@ public class Order {
 
     public enum Status{
         PENDING,
-        COOKING,
-        DELIVERING,
+//        COOKING,
+//        DELIVERING,
         DELIVERED,
-        CANCELED
+        CANCELED;
+    }
+
+    public void cancel() {
+        this.status=Status.CANCELED;
     }
 
     public static Order of(User user,Store store,Menu menu,int quantity,int priceSnapshot,String address){
