@@ -3,11 +3,13 @@ package org.example.delivery.domain.store.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
-import org.example.delivery.domain.store.dto.CreateStoreResponseDto;
+import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/stores")
@@ -18,16 +20,27 @@ public class StoreController {
 
     // 가게 생성 post
     @PostMapping
-    public ResponseEntity<CreateStoreResponseDto> createStore(
+    public ResponseEntity<StoreResponseDto> createStore(
             @RequestHeader("Authorization") String token,
-            @Valid @RequestBody CreateStoreRequestDto requestDto){
-        CreateStoreResponseDto responseDto = storeService.createStore(requestDto,token);
+            @Valid @RequestBody CreateStoreRequestDto requestDto
+    ){
+        StoreResponseDto responseDto = storeService.createStore(requestDto,token);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); //201
     }
 
-    // 가게 조회 -> 메뉴 리스트 조회 불가. 가게명에 따른 전체 가게 확인 가능
+    // 가게 조회 -> 메뉴는 조회 불가. 가게명에 따른 전체 가게 확인 가능
+    @GetMapping
+    public ResponseEntity<List<StoreResponseDto>> getStoresByName(
+            @RequestParam("name") String name
+    ){
+        List<StoreResponseDto> responseDtoList = storeService.getStoresByName(name);
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+    }
 
     // 가게 단일 조회 -> 메뉴 리스트 확인 가능
+    @GetMapping
+    public ResponseEntity<>
+
 
     // 가게 수정
 

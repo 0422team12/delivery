@@ -1,6 +1,5 @@
 package org.example.delivery.domain.store.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,7 +7,7 @@ import java.time.LocalTime;
 
 @Getter
 @RequiredArgsConstructor
-public class CreateStoreResponseDto {
+public class StoreResponseDto {
 
     private final String name; // 가게명
 

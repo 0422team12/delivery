@@ -1,17 +1,17 @@
 package org.example.delivery.domain.store.service;
 
-import io.jsonwebtoken.Claims;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.config.JwtUtil;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
-import org.example.delivery.domain.store.dto.CreateStoreResponseDto;
+import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.store.repository.StoreRepository;
 import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class StoreService {
     private final JwtUtil jwtUtil;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
-    public CreateStoreResponseDto createStore(CreateStoreRequestDto requestDto, String token) {
+    public StoreResponseDto createStore(CreateStoreRequestDto requestDto, String token) {
 
         UserRole userRole = jwtUtil.getClaims(token).get("userRole", UserRole.class); // 토큰에서 유저 롤 추출
 
@@ -50,11 +50,21 @@ public class StoreService {
 
         Store saved = storeRepository.save(store);
 
-        return new CreateStoreResponseDto(saved.getName(), saved.getOpeningTime(), saved.getClosing_time(), saved.getMinOrderValue());
-
+        return new StoreResponseDto(saved.getName(), saved.getOpeningTime(), saved.getClosing_time(), saved.getMinOrderValue());
 
     }
 
+    // 가게 조회
+    public List<StoreResponseDto> getStoresByName(String name) {
+        List<Store> storeList = storeRepository.findAllByNameContainingAndClosedIsFalse(name); // 폐업하지 않은 가게들만 조회
 
+        return storeList.stream()
+                .map(store -> new StoreResponseDto(
+                        store.getName(),
+                        store.getOpeningTime(),
+                        store.getClosing_time(),
+                        store.getMinOrderValue()
+                )).toList();
 
+    }
 }
