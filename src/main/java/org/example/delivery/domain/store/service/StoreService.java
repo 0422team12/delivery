@@ -3,6 +3,7 @@ package org.example.delivery.domain.store.service;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.config.JwtUtil;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.store.repository.StoreRepository;
@@ -56,6 +57,7 @@ public class StoreService {
 
     // 가게 조회
     public List<StoreResponseDto> getStoresByName(String name) {
+
         List<Store> storeList = storeRepository.findAllByNameContainingAndClosedIsFalse(name); // 폐업하지 않은 가게들만 조회
 
         return storeList.stream()
@@ -65,6 +67,21 @@ public class StoreService {
                         store.getClosing_time(),
                         store.getMinOrderValue()
                 )).toList();
+
+    }
+
+    // 가게 단건 조회
+    // todo : return시 메뉴리스트 추가해야함
+    public StoreDetailResponseDto getStoreById(Long storeId) {
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다.")); // 추후 예외처리 repository로 빼서 관리
+
+        if (store.isClosed()) { //isClosed가 ture면 -> 폐업한 가게. 조회불가
+            throw new IllegalStateException("가게를 찾을 수 없습니다.");
+        }
+
+        return new StoreDetailResponseDto(store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue());
 
     }
 }

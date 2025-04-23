@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.user.entity.User;
+import org.springframework.lang.Contract;
 
 import java.time.LocalTime;
 

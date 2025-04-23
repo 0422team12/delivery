@@ -1,0 +1,22 @@
+package org.example.delivery.domain.store.dto;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.time.LocalTime;
+
+@Getter
+@RequiredArgsConstructor
+public class StoreDetailResponseDto {
+
+    private final String name; // 가게명
+
+    private final LocalTime openingTime; // 오픈시간
+
+    private final LocalTime closing_time; // 마감시간
+
+    private final Long minOrderValue; // 최소주문금액
+
+    // todo : 메뉴 리스트 추가
+
+}

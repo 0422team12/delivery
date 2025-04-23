@@ -3,6 +3,7 @@ package org.example.delivery.domain.store.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.service.StoreService;
 import org.springframework.http.HttpStatus;
@@ -38,8 +39,11 @@ public class StoreController {
     }
 
     // 가게 단일 조회 -> 메뉴 리스트 확인 가능
-    @GetMapping
-    public ResponseEntity<>
+    @GetMapping("/{storeId}")
+    public ResponseEntity<StoreDetailResponseDto> getStoreById(@PathVariable Long storeId) {
+        StoreDetailResponseDto responseDto = storeService.getStoreById(storeId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
 
 
     // 가게 수정
