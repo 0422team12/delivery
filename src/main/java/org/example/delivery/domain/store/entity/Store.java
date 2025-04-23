@@ -30,4 +30,13 @@ public class Store {
 
     private Long minOrderValue;
 
+    public Store(User owner, String name, LocalTime openingTime, LocalTime closing_time, boolean isClosed, Long minOrderValue) {
+        this.owner = owner;
+        this.name = name;
+        this.openingTime = openingTime;
+        this.closing_time = closing_time;
+        this.isClosed = isClosed;
+        this.minOrderValue = minOrderValue;
+    }
+
 }

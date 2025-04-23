@@ -14,7 +14,7 @@ public class CreateStoreRequestDto {
     private final String name; // 가게명
 
     @NotNull
-    private final LocalTime openingTime; // 오픈시간
+    private final LocalTime openingTime; // 오픈시간, 포맷팅 고민
 
     @NotNull
     private final LocalTime closing_time; // 마감시간
