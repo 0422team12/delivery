@@ -32,15 +32,4 @@ public class AuthController {
         return new ResponseEntity<>(loginToken, HttpStatus.OK);
     }
 
-    @GetMapping("/checkid")
-    public Long checkId(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-        return userId;
-    }
-
-    @GetMapping("/checkemail")
-    public String checkemail(HttpServletRequest request) {
-        String email = (String) request.getAttribute("email");
-        return email;
-    }
 }
