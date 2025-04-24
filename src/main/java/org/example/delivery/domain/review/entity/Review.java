@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.order.entity.Order;
+import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,6 +26,9 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Store store;
+
     @OneToOne
     private Order order; //주문당 1개 리뷰
 
@@ -34,15 +38,16 @@ public class Review {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     public static Review of(Order order, int rating, String content) {
         Review review = new Review();
         review.user=order.getUser();
         review.order=order;
+        review.store=order.getStore();
         review.rating=rating;
         review.content=content;
         return review;

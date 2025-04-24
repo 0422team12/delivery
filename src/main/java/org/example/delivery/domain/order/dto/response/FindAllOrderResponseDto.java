@@ -18,7 +18,7 @@ public class FindAllOrderResponseDto {
         return new FindAllOrderResponseDto(
                 order.getId(),
                 order.getStore().getName(),
-                order.getStatus(),
+                order.getStatus().name(),
                 order.getOrderedAt()
         );
     }

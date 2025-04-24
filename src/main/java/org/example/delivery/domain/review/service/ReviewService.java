@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -40,4 +42,25 @@ public class ReviewService {
         reviewRepository.save(review);
         return ReviewResponseDto.toDto(review);
     }
+
+    @Transactional(readOnly = true)
+    public List<ReviewResponseDto> findMyReviews(Long userId) {
+        List<Review> byUserId = reviewRepository.findByUserId(userId);
+        if(byUserId.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"작성한 리뷰가 없습니다.");
+        }
+        return byUserId.stream().map(ReviewResponseDto::toDto).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewResponseDto> findStoreReviews(Long storeId){
+        List<Review> byStoreId = reviewRepository.findByStoreId(storeId);
+        if(byStoreId.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"작성된 리뷰가 없습니다.");
+        }
+        return byStoreId.stream().map(ReviewResponseDto::toDto).toList();
+    }
+
+
+
 }
