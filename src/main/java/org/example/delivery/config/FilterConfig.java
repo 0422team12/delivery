@@ -1,6 +1,7 @@
 package org.example.delivery.config;
 
 import lombok.RequiredArgsConstructor;
+import org.example.delivery.common.JwtUtil;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
