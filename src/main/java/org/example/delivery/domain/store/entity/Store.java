@@ -1,12 +1,10 @@
 package org.example.delivery.domain.store.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.user.entity.User;
-import org.springframework.lang.Contract;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ public class Store {
 
     private LocalTime openingTime;
 
-    private LocalTime closing_time;
+    private LocalTime closingTime;
 
     private boolean isClosed;
 
@@ -42,7 +40,7 @@ public class Store {
         this.owner = owner;
         this.name = name;
         this.openingTime = openingTime;
-        this.closing_time = closing_time;
+        this.closingTime = closing_time;
         this.isClosed = isClosed;
         this.minOrderValue = minOrderValue;
     }
@@ -56,7 +54,7 @@ public class Store {
     }
 
     public void updateClosing_time(LocalTime closing_time) {
-        this.closing_time = closing_time;
+        this.closingTime = closing_time;
     }
 
     public void updateMinOrderValue(Long minOrderValue) {

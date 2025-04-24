@@ -1,6 +1,6 @@
 package org.example.delivery.domain.menu.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MenuRequestDto {
 
-    @NotNull
+    @NotBlank
     private final String name; // 음식명
 
-    @NotNull
+    @NotBlank
     private final Long price; // 가격
 
-    @NotNull
+    @NotBlank
     private final String content; // 음식설명
 
 }

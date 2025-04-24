@@ -1,6 +1,5 @@
 package org.example.delivery.domain.menu.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

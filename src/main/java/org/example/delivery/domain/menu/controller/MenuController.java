@@ -1,6 +1,7 @@
 package org.example.delivery.domain.menu.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuRequestDto;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
@@ -21,7 +22,7 @@ public class MenuController {
     @PostMapping
     public ResponseEntity<MenuResponseDto> createMenu(
             @PathVariable Long storeId,
-            @RequestBody MenuRequestDto requestDto,
+            @Valid @RequestBody MenuRequestDto requestDto,
             HttpServletRequest request
     ) {
         MenuResponseDto responseDto = menuService.createMenu(storeId, requestDto, request);
@@ -32,7 +33,7 @@ public class MenuController {
     @PatchMapping("/{menuId}")
     public ResponseEntity<MenuResponseDto> updateMenu(
             @PathVariable Long menuId,
-            @RequestBody MenuRequestDto requestDto,
+            @Valid @RequestBody MenuRequestDto requestDto,
             HttpServletRequest request
     ) {
         MenuResponseDto responseDto = menuService.updateMenu(menuId, requestDto, request);

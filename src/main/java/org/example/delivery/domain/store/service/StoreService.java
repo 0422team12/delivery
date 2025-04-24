@@ -53,7 +53,7 @@ public class StoreService {
 
         Store saved = storeRepository.save(store);
 
-        return new StoreResponseDto(saved.getId(), saved.getName(), saved.getOpeningTime(), saved.getClosing_time(), saved.getMinOrderValue());
+        return new StoreResponseDto(saved.getId(), saved.getName(), saved.getOpeningTime(), saved.getClosingTime(), saved.getMinOrderValue());
 
     }
 
@@ -67,7 +67,7 @@ public class StoreService {
                         store.getId(),
                         store.getName(),
                         store.getOpeningTime(),
-                        store.getClosing_time(),
+                        store.getClosingTime(),
                         store.getMinOrderValue()
                 )).toList();
 
@@ -97,7 +97,7 @@ public class StoreService {
                         menu.getContent()))
                 .collect(Collectors.toList());
 
-        return new StoreDetailResponseDto(store.getId(), store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue(), menuResponseDtoList);
+        return new StoreDetailResponseDto(store.getId(), store.getName(), store.getOpeningTime(), store.getClosingTime(), store.getMinOrderValue(), menuResponseDtoList);
 
     }
 
@@ -132,7 +132,7 @@ public class StoreService {
 
         Store updated = storeRepository.save(store);
 
-        return new StoreResponseDto(updated.getId(), updated.getName(), updated.getOpeningTime(), updated.getClosing_time(), updated.getMinOrderValue());
+        return new StoreResponseDto(updated.getId(), updated.getName(), updated.getOpeningTime(), updated.getClosingTime(), updated.getMinOrderValue());
     }
 
     // 가게 삭제
