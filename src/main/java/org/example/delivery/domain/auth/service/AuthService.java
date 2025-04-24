@@ -28,6 +28,7 @@ public class AuthService {
     }
 
     public LoginResponseDto login(String email, String password) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("이메일이 없음"));
 

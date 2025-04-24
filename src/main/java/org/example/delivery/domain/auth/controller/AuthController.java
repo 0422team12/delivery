@@ -6,10 +6,13 @@ import org.example.delivery.domain.auth.dto.LoginRequestDto;
 import org.example.delivery.domain.auth.dto.LoginResponseDto;
 import org.example.delivery.domain.auth.dto.SignupRequestDto;
 import org.example.delivery.domain.auth.service.AuthService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,8 +23,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Validated @RequestBody SignupRequestDto requestDto) {
-        authService.signup(requestDto.getEmail(), requestDto.getPassword(), requestDto.getUserRole());
-
+        try {
+            authService.signup(requestDto.getEmail(), requestDto.getPassword(), requestDto.getUserRole());
+        } catch(DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("이미 사용된 이메일");
+        }
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 

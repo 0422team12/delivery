@@ -2,7 +2,7 @@ package org.example.delivery.domain.user.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.config.PasswordEncoder;
+import org.example.delivery.common.PasswordEncoder;
 import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.stereotype.Service;
