@@ -1,10 +1,8 @@
 package org.example.delivery.domain.cart.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
 
@@ -47,7 +45,11 @@ public class Cart { //장바구니
         this.expiredAt = LocalDateTime.now().plusDays(1);
     }
 
-    public Boolean isEqualStoreId(Long storeId){
+    public boolean isExpired(){
+        return this.expiredAt.isBefore(LocalDateTime.now());
+    }
+
+    public boolean isEqualStoreId(Long storeId){
         return this.store.getId().equals(storeId); //추후 store entity의 메서드에 따라 변경 가능성
     }
 

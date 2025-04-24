@@ -1,6 +1,7 @@
 package org.example.delivery.domain.cart.repository;
 
 import org.example.delivery.domain.cart.dto.response.CartItemResponse;
+import org.example.delivery.domain.cart.entity.Cart;
 import org.example.delivery.domain.cart.entity.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,6 @@ import java.util.Optional;
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     default CartItem findByIdOrElseThrow(Long cartId){
-        //예외 통합 후 추가 예정
         return findById(cartId).orElseThrow();
     }
 

@@ -14,6 +14,7 @@ import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,13 +27,13 @@ public class CartService {
     private final UserRepository userRepository;
     private final MenuRepository menuRepository;
 
-    //Cart 객체 조회
+    //Cart 객체 조회 - 만료된 객체는 조회되지 않음
     public Cart getCartByUserId(Long userId){
-        return cartRepository.findByUserIdOrElseThrow(userId);
+        return cartRepository.findByUserIdAndExpiredAtAfterOrElseThrow(userId, LocalDateTime.now());
     }
 
     //장바구니 총 금액 계산
-    public Long computeTotalPrice(List<CartItemResponse> items){
+    private Long computeTotalPrice(List<CartItemResponse> items){
         return items.stream().
                 mapToLong(CartItemResponse::getPriceSnapshot)
                 .sum();
@@ -60,17 +61,16 @@ public class CartService {
         Menu menu = menuRepository.findByIdOrElseThrow(createCartItemRequest.getMenuId());
         Store store = menu.getStore();
 
-        // userId에 해당하는 장바구니 존재 여부를 확인하고 없다면 장바구니를 생성한다.
-        Cart cart = cartRepository.findByUserId(userId)
-                .orElseGet(() -> {
-                    Cart newCart = Cart.createCart(user, store);
-                    return cartRepository.save(newCart); //새로 생성해 데이터 베이스에 저장한 newCart 반환
-                });
+        // userId에 해당하는 장바구니 존재 여부를 확인한다.
+        Cart cart = cartRepository.findByUserId(userId).orElse(null);
 
-        //장바구니의 가게 id와 메뉴가 속한 가게 id를 비교한다.
-        if(!cart.isEqualStoreId(store.getId())){
-            //가게 id가 다르다면 장바구니를 초기화한다.
-            cart.getCartItems().clear();
+        //존재하는 장바구니가 없다면 새로운 장바구니를 생성한다.
+        if (cart == null) {
+            cart = cartRepository.save(Cart.createCart(user, store));
+        }
+
+        //존재하는 장바구니가 이미 만료되었거나, 장바구니의 가게 id와 메뉴가 속한 가게 id가 다른 경우 초기화한다.
+        if(cart.isExpired()|| !cart.isEqualStoreId(store.getId())){
             cartRepository.deleteById(cart.getId());
             cart = cartRepository.save(Cart.createCart(user, store));
         }
@@ -91,27 +91,50 @@ public class CartService {
         cartItemRepository.save(CartItem.createCartItem(cart, menu, createCartItemRequest.getQuantity()));
     }
 
+    //Cart 객체의 유효성 검사
+    private void validateCartIsNotExpired(Cart cart){
+        if(cart.isExpired()){
+            //일단 예외 아무거나 날려놓음
+            throw new IllegalArgumentException("유효하지 않은 접근입니다.");
+        }
+    }
+
     //메뉴 수량 변경
     public void updateCartItemQuantity(Long cartItemId, UpdateCartItemRequest updateCartItemRequest){
+
+        //장바구니의 메뉴 조회
+        CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartItemId);
+
+        //장바구니 유효성 검사
+        validateCartIsNotExpired(cartItem.getCart());
+
         //수량이 0 이하일 경우 삭제
         if(updateCartItemRequest.getQuantity() <= 0){
             deleteSingleCartItem(cartItemId);
             return;
         }
-        //장바구니의 메뉴 조회
-        CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartItemId);
+
         //수량을 변경한다.
         cartItem.updateQuantity(updateCartItemRequest.getQuantity());
     }
 
     //장바구니 단일 메뉴 삭제
     public void deleteSingleCartItem(Long cartItemId){
+        //장바구니의 메뉴 조회
+        CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartItemId);
+        //장바구니 유효성 검사
+        validateCartIsNotExpired(cartItem.getCart());
+
         cartItemRepository.deleteById(cartItemId);
     }
 
-    //장바구니 전체 삭제
+    //장바구니 삭제
     public void deleteCart(Long userId){
-        cartRepository.deleteByUserId(userId);
+        //장바구니 조회
+        Cart cart = cartRepository.findByUserIdOrElseThrow(userId);
+        //장바구니 유효성 검사
+        validateCartIsNotExpired(cart);
+        cartRepository.deleteById(cart.getId());
     }
 
 }
