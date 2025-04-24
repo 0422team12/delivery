@@ -1,9 +1,11 @@
 package org.example.delivery.domain.order.dto.response;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.example.delivery.domain.order.entity.OrderItem;
 
-@RequiredArgsConstructor
+@Getter
+@AllArgsConstructor
 public class OrderItemResponseDto {
 
     private final String menuName;

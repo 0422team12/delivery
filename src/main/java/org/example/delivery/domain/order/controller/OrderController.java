@@ -1,6 +1,7 @@
 package org.example.delivery.domain.order.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.order.dto.request.OrderRequestDto;
@@ -23,7 +24,7 @@ public class OrderController {
     //주문생성
     @PostMapping("/orders")
     public ResponseEntity<OrderResponseDto> createOrder(@RequestAttribute("userId") Long userId,
-                                                        @RequestBody OrderRequestDto dto) {
+                                                        @Valid @RequestBody OrderRequestDto dto) {
 
         OrderResponseDto createOrder = orderService.createOrder(userId, dto.getCartId(),dto.getAddress());
         return new ResponseEntity<>(createOrder, HttpStatus.CREATED);
@@ -54,7 +55,7 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> updateOrder(@RequestAttribute("userId") Long userId,
                                                         @RequestAttribute("userRole") String userRole,
                                                         @PathVariable Long orderId,
-                                                        @RequestBody UpdateOrderRequestDto dto){
+                                                        @Valid @RequestBody UpdateOrderRequestDto dto){
 
         OrderResponseDto updateOrder = orderService.updateOrder(userId, userRole, orderId, dto.getStatus());
         return new ResponseEntity<>(updateOrder,HttpStatus.OK);

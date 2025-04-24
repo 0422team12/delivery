@@ -2,8 +2,6 @@ package org.example.delivery.domain.order.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.domain.menu.entity.Menu;
-import org.example.delivery.domain.order.dto.request.OrderRequestDto;
 import org.example.delivery.domain.order.dto.response.FindAllOrderResponseDto;
 import org.example.delivery.domain.order.dto.response.OrderResponseDto;
 import org.example.delivery.domain.order.entity.Order;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +24,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+//    private final StoreRepository storeRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
@@ -43,6 +41,8 @@ public class OrderService {
         }
         List<CartItem> cartItem = cartItemRepository.findAllByCartId(cart.getCartItem().getId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "장바구니에 담긴 메뉴가 없습니다.."));
+
+        //가게영업시간 조건
 
         //cartItem - > orderItem / cart_id,menu_id,quantity,price
         List<OrderItem> orderItems = cartItem.stream().map(OrderItem::of).collect(Collectors.toList());
