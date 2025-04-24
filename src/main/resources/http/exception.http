@@ -1,0 +1,8 @@
+###
+GET localhost:8080/test/exception
+
+###
+GET localhost:8080/test/exception?title=TITLE&body=BODY&status=201
+
+###
+GET localhost:8080/test/exception?title=TITLE
