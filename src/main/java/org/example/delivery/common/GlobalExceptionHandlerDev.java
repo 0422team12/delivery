@@ -1,4 +1,4 @@
-package org.example.delivery.config;
+package org.example.delivery.common;
 
 
 import org.springframework.context.annotation.Profile;

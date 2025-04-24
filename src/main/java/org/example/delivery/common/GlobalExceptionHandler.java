@@ -1,7 +1,6 @@
-package org.example.delivery.config;
+package org.example.delivery.common;
 
 import org.springframework.http.ProblemDetail;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

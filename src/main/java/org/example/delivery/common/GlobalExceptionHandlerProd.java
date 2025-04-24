@@ -1,4 +1,4 @@
-package org.example.delivery.config;
+package org.example.delivery.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
