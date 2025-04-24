@@ -1,5 +1,6 @@
 package org.example.delivery.domain.store.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.config.JwtUtil;
@@ -24,16 +25,15 @@ public class StoreService {
     private final JwtUtil jwtUtil;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
-    public StoreResponseDto createStore(CreateStoreRequestDto requestDto, String token) {
+    public StoreResponseDto createStore(CreateStoreRequestDto requestDto, HttpServletRequest request) {
 
-        UserRole userRole = jwtUtil.getClaims(token).get("userRole", UserRole.class); // 토큰에서 유저 롤 추출
+        UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // 토큰에서 유저 롤 추출
 
         if (userRole != UserRole.OWNER) {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 권한 있음
         }
 
-        // JWT에서 사용자 ID 추출
-        Long userId = jwtUtil.getUserIdFromToken(token);
+        Long userId = (Long) request.getAttribute("userId");
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -52,7 +52,7 @@ public class StoreService {
 
         Store saved = storeRepository.save(store);
 
-        return new StoreResponseDto(saved.getName(), saved.getOpeningTime(), saved.getClosing_time(), saved.getMinOrderValue());
+        return new StoreResponseDto(saved.getId(), saved.getName(), saved.getOpeningTime(), saved.getClosing_time(), saved.getMinOrderValue());
 
     }
 
@@ -63,6 +63,7 @@ public class StoreService {
 
         return storeList.stream()
                 .map(store -> new StoreResponseDto(
+                        store.getId(),
                         store.getName(),
                         store.getOpeningTime(),
                         store.getClosing_time(),
@@ -82,14 +83,15 @@ public class StoreService {
             throw new IllegalStateException("가게를 찾을 수 없습니다.");
         }
 
-        return new StoreDetailResponseDto(store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue());
+        return new StoreDetailResponseDto(store.getId(), store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue());
 
     }
 
     // 가게 수정
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, String token, CreateStoreRequestDto requestDto) {
-        Long userId = jwtUtil.getUserIdFromToken(token);
+    public StoreResponseDto updateStore(Long storeId, HttpServletRequest request, CreateStoreRequestDto requestDto) {
+
+        Long userId = (Long) request.getAttribute("userId");
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
@@ -116,13 +118,14 @@ public class StoreService {
 
         Store updated = storeRepository.save(store);
 
-        return new StoreResponseDto(updated.getName(), updated.getOpeningTime(), updated.getClosing_time(), updated.getMinOrderValue());
+        return new StoreResponseDto(updated.getId(), updated.getName(), updated.getOpeningTime(), updated.getClosing_time(), updated.getMinOrderValue());
     }
 
     // 가게 삭제
     @Transactional
-    public void closeStore(Long storeId, String token) {
-        Long userId = jwtUtil.getUserIdFromToken(token);
+    public void closeStore(Long storeId, HttpServletRequest request) {
+
+        Long userId = (Long) request.getAttribute("userId");
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));

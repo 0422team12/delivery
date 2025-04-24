@@ -1,5 +1,6 @@
 package org.example.delivery.domain.store.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
@@ -22,10 +23,10 @@ public class StoreController {
     // 가게 생성 post
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
-            @RequestHeader("Authorization") String token,
+            HttpServletRequest request,
             @Valid @RequestBody CreateStoreRequestDto requestDto
     ){
-        StoreResponseDto responseDto = storeService.createStore(requestDto,token);
+        StoreResponseDto responseDto = storeService.createStore(requestDto,request);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); //201
     }
 
@@ -50,10 +51,10 @@ public class StoreController {
     @PatchMapping("/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(
             @PathVariable Long storeId,
-            @RequestHeader("Authorization") String token,
+            HttpServletRequest request,
             @RequestBody CreateStoreRequestDto requestDto
     ) {
-        StoreResponseDto responseDto = storeService.updateStore(storeId, token, requestDto);
+        StoreResponseDto responseDto = storeService.updateStore(storeId, request, requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -62,8 +63,8 @@ public class StoreController {
     @DeleteMapping("/{storeId}")
     public ResponseEntity<Void> closeStore(
             @PathVariable Long storeId,
-            @RequestHeader("Authorization") String token) {
-        storeService.closeStore(storeId, token);
+            HttpServletRequest request) {
+        storeService.closeStore(storeId, request);
         return ResponseEntity.noContent().build(); // 204
     }
 

@@ -9,6 +9,8 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class StoreResponseDto {
 
+    private final Long id;
+
     private final String name; // 가게명
 
     private final LocalTime openingTime; // 오픈시간
