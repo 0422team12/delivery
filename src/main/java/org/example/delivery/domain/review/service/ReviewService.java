@@ -29,11 +29,14 @@ public class ReviewService {
     public ReviewResponseDto createReview(Long userId,Long orderId,int rating,String content){
         Order order = orderRepository.findById(orderId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."));
+
         if (!order.getUser().getId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "주문자와 작성자가 다릅니다.");
         }
+
         if (!order.getStatus().equals(Order.Status.DELIVERED)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 주문엔 아직 리뷰를 달 수 없습니다.");
+
         }
         if(reviewRepository.existsByOrderId(orderId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"이미 리뷰가 존재합니다.");
@@ -45,22 +48,31 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public List<ReviewResponseDto> findMyReviews(Long userId) {
-        List<Review> byUserId = reviewRepository.findByUserId(userId);
+        List<Review> byUserId = reviewRepository.findByUserIdOrderByCreatedAtDesc(userId);
         if(byUserId.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"작성한 리뷰가 없습니다.");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT,"작성한 리뷰가 없습니다.");
         }
         return byUserId.stream().map(ReviewResponseDto::toDto).toList();
     }
 
     @Transactional(readOnly = true)
     public List<ReviewResponseDto> findStoreReviews(Long storeId){
-        List<Review> byStoreId = reviewRepository.findByStoreId(storeId);
+        List<Review> byStoreId = reviewRepository.findByStoreIdOrderByCreatedAtDesc(storeId);
         if(byStoreId.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"작성된 리뷰가 없습니다.");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT,"작성된 리뷰가 없습니다.");
         }
         return byStoreId.stream().map(ReviewResponseDto::toDto).toList();
     }
 
+    @Transactional
+    public void deleteReview(Long userId,Long reviewId){
+        Review review = reviewRepository.findById(reviewId).
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다."));
+        if (!review.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인이 작성한 리뷰만 삭제할 수 있습니다.");
+        }
+        reviewRepository.delete(review);
+    }
 
 
 }

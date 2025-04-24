@@ -2,6 +2,7 @@ package org.example.delivery.domain.order.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.delivery.domain.order.dto.response.FindAllOrderResponseDto;
 import org.example.delivery.domain.order.dto.response.OrderResponseDto;
 import org.example.delivery.domain.order.entity.Order;
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -49,6 +52,9 @@ public class OrderService {
 
         Order order = Order.of(user,cart.getStore(),orderItems,address);
         orderRepository.save(order);
+
+        log.info("로깅- 요청시각 : {},가게 ID : {},주문 ID : {}",
+                LocalDateTime.now(),order.getStore().getId(),order.getId());
 
         return OrderResponseDto.toDto(order);
     }
@@ -101,6 +107,10 @@ public class OrderService {
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "유효하지 않은 주문 상태입니다.");
         }
+
+        log.info("로깅- 요청시각 : {},가게 ID : {},주문 ID : {}",
+                LocalDateTime.now(),order.getStore().getId(),orderId);
+
         return OrderResponseDto.toDto(order);
     }
 }
