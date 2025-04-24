@@ -1,13 +1,12 @@
 package org.example.delivery.domain.order.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.order.entity.Order;
 
 import java.time.LocalDateTime;
-
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class FindAllOrderResponseDto {
 
     private final Long orderId;
