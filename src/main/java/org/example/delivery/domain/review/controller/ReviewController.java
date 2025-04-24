@@ -40,6 +40,14 @@ public class ReviewController {
         List<ReviewResponseDto> findStoreReviews = reviewService.findStoreReviews(storeId);
         return new ResponseEntity<>(findStoreReviews,HttpStatus.OK);
     }
+    //가게 리뷰 평점별로조회
+    @GetMapping("/store/{storeId}/reviews")
+    public ResponseEntity<List<ReviewResponseDto>> findStoreReviewByRating(@PathVariable Long storeId,
+                                                                           @RequestParam(required = false)int minRating,
+                                                                           @RequestParam(required = false)int maxRating){
+        reviewService.findStoreReviewByRating(storeId,minRating,maxRating);
+
+    }
 
     @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@RequestAttribute("userId")Long userId,

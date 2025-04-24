@@ -64,6 +64,14 @@ public class ReviewService {
         return byStoreId.stream().map(ReviewResponseDto::toDto).toList();
     }
 
+    public List<ReviewResponseDto> findStoreReviewByRating(Long storeId, int minRating, int maxRating) {
+        List<Review> byRatingBetween = reviewRepository.findByRatingBetween(minRating, maxRating);
+        if(byRatingBetween.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT,"작성된 리뷰가 없습니다");
+        }
+        return byRatingBetween.stream().map(ReviewResponseDto::toDto).toList();
+    }
+
     @Transactional
     public void deleteReview(Long userId,Long reviewId){
         Review review = reviewRepository.findById(reviewId).
@@ -73,6 +81,5 @@ public class ReviewService {
         }
         reviewRepository.delete(review);
     }
-
 
 }
