@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.lang.Contract;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +34,9 @@ public class Store {
     private boolean isClosed;
 
     private Long minOrderValue;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    private List<Menu> menuList = new ArrayList<>();
 
     public Store(User owner, String name, LocalTime openingTime, LocalTime closing_time, boolean isClosed, Long minOrderValue) {
         this.owner = owner;

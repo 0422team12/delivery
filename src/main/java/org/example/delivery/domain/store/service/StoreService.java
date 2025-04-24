@@ -3,6 +3,8 @@ package org.example.delivery.domain.store.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.delivery.domain.menu.dto.MenuResponseDto;
+import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.store.dto.StoreRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
@@ -14,6 +16,7 @@ import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +84,20 @@ public class StoreService {
             throw new IllegalStateException("가게를 찾을 수 없습니다.");
         }
 
-        return new StoreDetailResponseDto(store.getId(), store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue());
+        List<Menu> activeMenus = store.getMenuList().stream() // 삭제되지 않은 메뉴만 필터링
+                .filter(menu -> !menu.isDeleted())
+                .collect(Collectors.toList());
+
+        // Menu -> MenuResponseDto 변환
+        List<MenuResponseDto> menuResponseDtoList = activeMenus.stream()
+                .map(menu -> new MenuResponseDto(
+                        menu.getId(),
+                        menu.getName(),
+                        menu.getPrice(),
+                        menu.getContent()))
+                .collect(Collectors.toList());
+
+        return new StoreDetailResponseDto(store.getId(), store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue(), menuResponseDtoList);
 
     }
 
