@@ -46,7 +46,7 @@ public class StoreService {
                 owner,
                 requestDto.getName(),
                 requestDto.getOpeningTime(),
-                requestDto.getClosing_time(),
+                requestDto.getClosingTime(),
                 false,
                 requestDto.getMinOrderValue()
         ); // 저장되어야 할 정보 : request로 받아온 가게이름,오픈시간,클로징시간,최소주문금액 & 사장님 이름(?? 어떻게 저장)
@@ -122,8 +122,8 @@ public class StoreService {
             store.updateOpeningTime(requestDto.getOpeningTime());
         }
 
-        if (requestDto.getClosing_time() != null) {
-            store.updateClosing_time(requestDto.getClosing_time());
+        if (requestDto.getClosingTime() != null) {
+            store.updateClosingTime(requestDto.getClosingTime());
         }
 
         if (requestDto.getMinOrderValue() != null) {

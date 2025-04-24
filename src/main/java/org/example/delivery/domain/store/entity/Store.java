@@ -36,11 +36,11 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
-    public Store(User owner, String name, LocalTime openingTime, LocalTime closing_time, boolean isClosed, Long minOrderValue) {
+    public Store(User owner, String name, LocalTime openingTime, LocalTime closingTime, boolean isClosed, Long minOrderValue) {
         this.owner = owner;
         this.name = name;
         this.openingTime = openingTime;
-        this.closingTime = closing_time;
+        this.closingTime = closingTime;
         this.isClosed = isClosed;
         this.minOrderValue = minOrderValue;
     }
@@ -53,8 +53,8 @@ public class Store {
         this.openingTime = openingTime;
     }
 
-    public void updateClosing_time(LocalTime closing_time) {
-        this.closingTime = closing_time;
+    public void updateClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
     }
 
     public void updateMinOrderValue(Long minOrderValue) {

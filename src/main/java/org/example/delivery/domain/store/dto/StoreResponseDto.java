@@ -15,7 +15,7 @@ public class StoreResponseDto {
 
     private final LocalTime openingTime; // 오픈시간
 
-    private final LocalTime closing_time; // 마감시간
+    private final LocalTime closingTime; // 마감시간
 
     private final Long minOrderValue; // 최소주문금액
 

@@ -17,7 +17,7 @@ public class StoreRequestDto {
     private final LocalTime openingTime; // 오픈시간, 포맷팅 고민
 
     @NotBlank
-    private final LocalTime closing_time; // 마감시간
+    private final LocalTime closingTime; // 마감시간
 
     @NotBlank
     private final Long minOrderValue; // 최소주문금액
