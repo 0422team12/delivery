@@ -2,6 +2,7 @@ package org.example.delivery.domain.menu.service;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuRequestDto;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
@@ -44,6 +45,7 @@ public class MenuService {
     }
 
     // 메뉴 수정
+    @Transactional
     public MenuResponseDto updateMenu(Long menuId, MenuRequestDto requestDto, HttpServletRequest request) {
         // 1. 메뉴 id 받아와서 null 체크 후 정보 있으면 menu 가져옴
         Menu menu = menuRepository.findById(menuId)
@@ -75,6 +77,7 @@ public class MenuService {
     }
 
     // 메뉴 삭제
+    @Transactional
     public void deleteMenu(Long menuId, HttpServletRequest request) {
         // 본인 가게만 삭제 가능
         Menu menu = menuRepository.findById(menuId)
