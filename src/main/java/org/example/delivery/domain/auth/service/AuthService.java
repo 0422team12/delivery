@@ -1,8 +1,8 @@
 package org.example.delivery.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.config.JwtUtil;
-import org.example.delivery.config.PasswordEncoder;
+import org.example.delivery.common.JwtUtil;
+import org.example.delivery.common.PasswordEncoder;
 import org.example.delivery.domain.auth.dto.LoginResponseDto;
 import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
