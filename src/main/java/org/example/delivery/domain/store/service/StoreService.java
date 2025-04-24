@@ -3,7 +3,7 @@ package org.example.delivery.domain.store.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.entity.Store;
@@ -23,7 +23,7 @@ public class StoreService {
     private final UserRepository userRepository;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
-    public StoreResponseDto createStore(CreateStoreRequestDto requestDto, HttpServletRequest request) {
+    public StoreResponseDto createStore(StoreRequestDto requestDto, HttpServletRequest request) {
 
         UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // userroll 추출
 
@@ -87,7 +87,7 @@ public class StoreService {
 
     // 가게 수정
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, HttpServletRequest request, CreateStoreRequestDto requestDto) {
+    public StoreResponseDto updateStore(Long storeId, HttpServletRequest request, StoreRequestDto requestDto) {
 
         Long userId = (Long) request.getAttribute("userId");
 

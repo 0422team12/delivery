@@ -1,6 +1,7 @@
 package org.example.delivery.domain.menu.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.store.entity.Store;
@@ -34,6 +35,22 @@ public class Menu {
         this.price = price;
         this.content = content;
         this.isDeleted = isDeleted;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePrice(Long price) {
+        this.price = price;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void isDeletedTrue() {
+        this.isDeleted = true;
     }
 
 }

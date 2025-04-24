@@ -3,7 +3,7 @@ package org.example.delivery.domain.store.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.service.StoreService;
@@ -24,7 +24,7 @@ public class StoreController {
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
             HttpServletRequest request,
-            @Valid @RequestBody CreateStoreRequestDto requestDto
+            @Valid @RequestBody StoreRequestDto requestDto
     ){
         StoreResponseDto responseDto = storeService.createStore(requestDto,request);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); //201
@@ -52,7 +52,7 @@ public class StoreController {
     public ResponseEntity<StoreResponseDto> updateStore(
             @PathVariable Long storeId,
             HttpServletRequest request,
-            @RequestBody CreateStoreRequestDto requestDto
+            @RequestBody StoreRequestDto requestDto
     ) {
         StoreResponseDto responseDto = storeService.updateStore(storeId, request, requestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);

@@ -2,9 +2,10 @@ package org.example.delivery.domain.menu.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.domain.menu.dto.CreateMenuRequestDto;
+import org.example.delivery.domain.menu.dto.MenuRequestDto;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
 import org.example.delivery.domain.menu.service.MenuService;
+import org.example.delivery.domain.store.dto.StoreRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class MenuController {
     @PostMapping
     public ResponseEntity<MenuResponseDto> createMenu(
             @PathVariable Long storeId,
-            @RequestBody CreateMenuRequestDto requestDto,
+            @RequestBody MenuRequestDto requestDto,
             HttpServletRequest request
     ) {
         MenuResponseDto responseDto = menuService.createMenu(storeId, requestDto, request);
@@ -28,8 +29,25 @@ public class MenuController {
     }
 
     // 메뉴 수정
+    @PatchMapping("/{menuId}")
+    public ResponseEntity<MenuResponseDto> updateMenu(
+            @PathVariable Long menuId,
+            @RequestBody MenuRequestDto requestDto,
+            HttpServletRequest request
+    ) {
+        MenuResponseDto responseDto = menuService.updateMenu(menuId, requestDto, request);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
 
     // 메뉴 삭제
+    @DeleteMapping("/{menuId}")
+    public ResponseEntity<Void> deleteMenu(
+            @PathVariable Long menuId,
+            HttpServletRequest request
+    ) {
+        menuService.deleteMenu(menuId, request);
+        return ResponseEntity.noContent().build();
+    }
 
     // + 메뉴 조회는 가게 조회시 함께 조회
 

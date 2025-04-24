@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Getter
 @RequiredArgsConstructor
-public class CreateStoreRequestDto {
+public class StoreRequestDto {
 
     @NotNull
     private final String name; // 가게명

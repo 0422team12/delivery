@@ -2,8 +2,10 @@ package org.example.delivery.domain.store.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.example.delivery.domain.menu.entity.Menu;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -20,5 +22,6 @@ public class StoreDetailResponseDto {
     private final Long minOrderValue; // 최소주문금액
 
     // todo : 메뉴 리스트 추가
+    // private final List<Menu> menuList;
 
 }
