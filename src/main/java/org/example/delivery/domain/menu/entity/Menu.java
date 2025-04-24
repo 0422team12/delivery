@@ -28,4 +28,12 @@ public class Menu {
 
     private boolean isDeleted;
 
+    public Menu(Store store, String name, Long price, String content, boolean isDeleted) {
+        this.store = store;
+        this.name = name;
+        this.price = price;
+        this.content = content;
+        this.isDeleted = isDeleted;
+    }
+
 }

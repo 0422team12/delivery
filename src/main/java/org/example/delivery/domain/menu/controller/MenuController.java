@@ -1,13 +1,13 @@
 package org.example.delivery.domain.menu.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.delivery.domain.menu.dto.CreateMenuRequestDto;
+import org.example.delivery.domain.menu.dto.MenuResponseDto;
 import org.example.delivery.domain.menu.service.MenuService;
-import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/stores/{storeId}/menus")
@@ -18,8 +18,13 @@ public class MenuController {
 
     // 메뉴 생성
     @PostMapping
-    public ResponseEntity<MenuResponseDto> createMenu(@RequestBody CreateStoreRequestDto requestDto){
-
+    public ResponseEntity<MenuResponseDto> createMenu(
+            @PathVariable Long storeId,
+            @RequestBody CreateMenuRequestDto requestDto,
+            HttpServletRequest request
+    ) {
+        MenuResponseDto responseDto = menuService.createMenu(storeId, requestDto, request);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     // 메뉴 수정

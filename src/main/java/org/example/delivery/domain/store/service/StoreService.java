@@ -3,7 +3,6 @@ package org.example.delivery.domain.store.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.config.JwtUtil;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
@@ -22,12 +21,11 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
     public StoreResponseDto createStore(CreateStoreRequestDto requestDto, HttpServletRequest request) {
 
-        UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // 토큰에서 유저 롤 추출
+        UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // userroll 추출
 
         if (userRole != UserRole.OWNER) {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 권한 있음

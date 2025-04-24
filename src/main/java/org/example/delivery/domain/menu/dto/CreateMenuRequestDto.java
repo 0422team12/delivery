@@ -11,12 +11,12 @@ import org.example.delivery.domain.store.entity.Store;
 public class CreateMenuRequestDto {
 
     @NotNull
-    private String name;
+    private final String name; // 음식명
 
     @NotNull
-    private Long price;
+    private final Long price; // 가격
 
     @NotNull
-    private String content;
+    private final String content; // 음식설명
 
 }
