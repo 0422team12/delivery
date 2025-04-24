@@ -1,6 +1,7 @@
 package org.example.delivery.domain.store.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.user.entity.User;
@@ -10,6 +11,7 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Table(name="stores")
+@AllArgsConstructor
 @NoArgsConstructor
 public class Store {
 

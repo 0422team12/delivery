@@ -3,6 +3,7 @@ package org.example.delivery.domain.cart.repository;
 import org.example.delivery.domain.cart.dto.response.CartItemResponse;
 import org.example.delivery.domain.cart.entity.Cart;
 import org.example.delivery.domain.cart.entity.CartItem;
+import org.example.delivery.domain.menu.entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +29,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     List<CartItemResponse> findAllByCartId(@Param("cartId") Long cartId);
 
     Optional<CartItem> findByCartIdAndMenuId(Long cartId, Long menuId);
+
+    Long menu(Menu menu);
 }
