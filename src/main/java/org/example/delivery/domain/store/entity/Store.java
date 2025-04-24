@@ -1,6 +1,7 @@
 package org.example.delivery.domain.store.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.user.entity.User;
@@ -40,4 +41,28 @@ public class Store {
         this.minOrderValue = minOrderValue;
     }
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public void updateClosing_time(LocalTime closing_time) {
+        this.closing_time = closing_time;
+    }
+
+    public void updateMinOrderValue(Long minOrderValue) {
+        this.minOrderValue = minOrderValue;
+    }
+
+    public void isClosedTrue() {
+        this.isClosed = true;
+    }
+
+
 }
+
+
+

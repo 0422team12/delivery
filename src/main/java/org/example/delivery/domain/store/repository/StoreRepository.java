@@ -10,6 +10,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     int countByOwner(User owner);
 
-    List<Store> findAllByNameContainingAndClosedIsFalse(String name);
+    List<Store> findAllByNameContainingAndIsClosedFalse(String name);
 
 }

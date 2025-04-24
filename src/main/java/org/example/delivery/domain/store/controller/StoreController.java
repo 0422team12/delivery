@@ -47,8 +47,25 @@ public class StoreController {
 
 
     // 가게 수정
+    @PatchMapping("/{storeId}")
+    public ResponseEntity<StoreResponseDto> updateStore(
+            @PathVariable Long storeId,
+            @RequestHeader("Authorization") String token,
+            @RequestBody CreateStoreRequestDto requestDto
+    ) {
+        StoreResponseDto responseDto = storeService.updateStore(storeId, token, requestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
 
     // 가게 삭제(폐업)
+    @DeleteMapping("/{storeId}")
+    public ResponseEntity<Void> closeStore(
+            @PathVariable Long storeId,
+            @RequestHeader("Authorization") String token) {
+        storeService.closeStore(storeId, token);
+        return ResponseEntity.noContent().build(); // 204
+    }
 
 
 }

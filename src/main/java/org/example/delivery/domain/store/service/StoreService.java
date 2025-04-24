@@ -1,5 +1,6 @@
 package org.example.delivery.domain.store.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.config.JwtUtil;
 import org.example.delivery.domain.store.dto.CreateStoreRequestDto;
@@ -58,7 +59,7 @@ public class StoreService {
     // 가게 조회
     public List<StoreResponseDto> getStoresByName(String name) {
 
-        List<Store> storeList = storeRepository.findAllByNameContainingAndClosedIsFalse(name); // 폐업하지 않은 가게들만 조회
+        List<Store> storeList = storeRepository.findAllByNameContainingAndIsClosedFalse(name); // 폐업하지 않은 가게들만 조회
 
         return storeList.stream()
                 .map(store -> new StoreResponseDto(
@@ -84,4 +85,56 @@ public class StoreService {
         return new StoreDetailResponseDto(store.getName(), store.getOpeningTime(), store.getClosing_time(), store.getMinOrderValue());
 
     }
+
+    // 가게 수정
+    @Transactional
+    public StoreResponseDto updateStore(Long storeId, String token, CreateStoreRequestDto requestDto) {
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
+
+        if (!store.getOwner().getId().equals(userId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 접근 가능
+        }
+
+        if (requestDto.getName() != null) {
+            store.updateName(requestDto.getName());
+        }
+
+        if (requestDto.getOpeningTime() != null) {
+            store.updateOpeningTime(requestDto.getOpeningTime());
+        }
+
+        if (requestDto.getClosing_time() != null) {
+            store.updateClosing_time(requestDto.getClosing_time());
+        }
+
+        if (requestDto.getMinOrderValue() != null) {
+            store.updateMinOrderValue(requestDto.getMinOrderValue());
+        }
+
+        Store updated = storeRepository.save(store);
+
+        return new StoreResponseDto(updated.getName(), updated.getOpeningTime(), updated.getClosing_time(), updated.getMinOrderValue());
+    }
+
+    // 가게 삭제
+    @Transactional
+    public void closeStore(Long storeId, String token) {
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
+
+        if (!store.getOwner().getId().equals(userId)) {
+            throw new IllegalArgumentException("접근 권한이 없습니다.");
+        }
+
+        store.isClosedTrue(); // 폐업 처리
+
+        storeRepository.save(store);
+    }
+
+
 }
