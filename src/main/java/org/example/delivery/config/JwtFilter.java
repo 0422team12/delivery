@@ -11,7 +11,6 @@ import org.example.delivery.common.JwtUtil;
 import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;

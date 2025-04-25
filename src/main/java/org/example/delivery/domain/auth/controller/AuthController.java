@@ -1,6 +1,5 @@
 package org.example.delivery.domain.auth.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.auth.dto.LoginRequestDto;
 import org.example.delivery.domain.auth.dto.LoginResponseDto;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @RequestMapping("/auth")
