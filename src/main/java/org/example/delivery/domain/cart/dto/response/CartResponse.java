@@ -19,7 +19,7 @@ public class CartResponse {
     private boolean isOrderAvailable;           //최소 주문 금액 충족 여부
     private String message;
 
-    public static CartResponse createCartResponse(Long cartId, Store store, List<CartItemResponse>items, Long totalPrice, boolean isOrderAvailable){
+    public static CartResponse createCartResponse(Long cartId, Store store, List<CartItemResponse> items, Long totalPrice, boolean isOrderAvailable) {
         String message = isOrderAvailable
                 ? "주문 가능합니다"
                 : "최소 주문 금액은 " + store.getMinOrderValue() + "원입니다";

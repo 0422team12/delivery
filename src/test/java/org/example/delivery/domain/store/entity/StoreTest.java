@@ -18,7 +18,6 @@ class StoreTest {
         //given
         Long minOrderValue = 10000L;
         Store store = new Store(
-                1L,
                 new User(),
                 "testStore",
                 LocalTime.of(10, 0),
@@ -39,7 +38,6 @@ class StoreTest {
         //given
         Long minOrderValue = 10000L;
         Store store = new Store(
-                1L,
                 new User(),
                 "testStore",
                 LocalTime.of(10, 0),
@@ -58,7 +56,6 @@ class StoreTest {
         //given
         Long minOrderValue = 10000L;
         Store store = new Store(
-                1L,
                 new User(),
                 "testStore",
                 LocalTime.of(10, 0),

@@ -1,6 +1,7 @@
 package org.example.delivery.domain.store.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,13 +14,13 @@ public class StoreRequestDto {
     @NotBlank
     private final String name; // 가게명
 
-    @NotBlank
+    @NotNull
     private final LocalTime openingTime; // 오픈시간, 포맷팅 고민
 
-    @NotBlank
+    @NotNull
     private final LocalTime closingTime; // 마감시간
 
-    @NotBlank
+    @NotNull
     private final Long minOrderValue; // 최소주문금액
 
 }

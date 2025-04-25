@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateCartItemRequest {
     //null, 0, 음수를 허용하지 않음
-    @NotNull @Min(1)
+    @NotNull
+    @Min(1)
     private Long menuId;    //메뉴 아이디
 
-    @NotNull @Min(1)
+    @NotNull
+    @Min(1)
     private int quantity;  //수량
 }

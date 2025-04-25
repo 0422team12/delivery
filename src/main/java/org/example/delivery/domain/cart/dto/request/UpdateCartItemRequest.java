@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCartItemRequest {
     @NotNull
-    @Min(1)
-    private int quantity;  //수량
-                            //메뉴 아이디는 url parameter로 받음
+    @Min(0)
+    private int quantity;  //수량, 메뉴 아이디는 url parameter로 받음
 }
