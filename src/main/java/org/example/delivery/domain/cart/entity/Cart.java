@@ -42,7 +42,7 @@ public class Cart { //장바구니
         return new Cart(user, store, expiredAt);
     }
 
-    public void updateCartExpriedAt() {
+    public void updateCartExpiredAt() {
         this.expiredAt = LocalDateTime.now().plusDays(1);
     }
 

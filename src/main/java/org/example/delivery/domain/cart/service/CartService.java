@@ -7,6 +7,7 @@ import org.example.delivery.domain.cart.dto.response.CartItemResponse;
 import org.example.delivery.domain.cart.dto.response.CartResponse;
 import org.example.delivery.domain.cart.entity.Cart;
 import org.example.delivery.domain.cart.entity.CartItem;
+import org.example.delivery.domain.cart.exception.CartNotFoundException;
 import org.example.delivery.domain.cart.repository.CartItemRepository;
 import org.example.delivery.domain.cart.repository.CartRepository;
 import org.example.delivery.domain.menu.entity.Menu;
@@ -76,6 +77,7 @@ public class CartService {
         //존재하는 장바구니가 이미 만료되었거나, 장바구니의 가게 id와 메뉴가 속한 가게 id가 다른 경우 초기화한다.
         if (cart.isExpired() || !cart.isEqualStoreId(store.getId())) {
             deleteCart(userId);
+            cartRepository.flush(); //삭제를 즉시 반영
             cart = cartRepository.save(Cart.createCart(user, store, LocalDateTime.now().plusDays(1)));
         }
 
@@ -89,7 +91,7 @@ public class CartService {
         }
 
         //장바구니 만료일시를 업데이트한다.
-        cart.updateCartExpriedAt();
+        cart.updateCartExpiredAt();
 
         //존재하지 않는 메뉴라면 cartItem에 추가한다.
         cartItemRepository.save(CartItem.createCartItem(cart, menu, createCartItemRequest.getQuantity()));
@@ -98,7 +100,7 @@ public class CartService {
     //Cart 객체의 유효성 검사
     private void validateCartIsExpired(Cart cart) {
         if (cart.isExpired()) {
-            throw new IllegalArgumentException("유효하지 않은 접근입니다.");
+            throw new CartNotFoundException();
         }
     }
 
@@ -112,7 +114,7 @@ public class CartService {
         validateCartIsExpired(cartItem.getCart());
 
         //만료시간 업데이트
-        cartItem.getCart().updateCartExpriedAt();
+        cartItem.getCart().updateCartExpiredAt();
 
         //수량이 0 이하일 경우 삭제
         if (updateCartItemRequest.getQuantity() <= 0) {
@@ -142,7 +144,6 @@ public class CartService {
         validateCartIsExpired(cart);
 
         cartRepository.deleteById(cart.getId());
-        cartRepository.flush();
     }
 
 }
