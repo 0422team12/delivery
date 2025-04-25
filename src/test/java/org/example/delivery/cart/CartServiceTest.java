@@ -194,7 +194,7 @@ public class CartServiceTest {
     @DisplayName("만료된 장바구니는 조회되지 않는다.")
     void testUnvalidCartCouldNotFind(){
         //given
-        Cart cart = Cart.createCart(new User(), new Store());
+        Cart cart = Cart.createCart(new User(), new Store(), LocalDateTime.now().plusDays(1));
         cart.updateCartExpriedAt();
         cartRepository.save(cart);
         //when

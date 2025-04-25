@@ -66,17 +66,14 @@ public class CartService {
 
         //존재하는 장바구니가 없다면 새로운 장바구니를 생성한다.
         if (cart == null) {
-            cart = cartRepository.save(Cart.createCart(user, store));
+            cart = cartRepository.save(Cart.createCart(user, store, LocalDateTime.now().plusDays(1)));
         }
 
         //존재하는 장바구니가 이미 만료되었거나, 장바구니의 가게 id와 메뉴가 속한 가게 id가 다른 경우 초기화한다.
         if(cart.isExpired()|| !cart.isEqualStoreId(store.getId())){
             cartRepository.deleteById(cart.getId());
-            cart = cartRepository.save(Cart.createCart(user, store));
+            cart = cartRepository.save(Cart.createCart(user, store, LocalDateTime.now().plusDays(1)));
         }
-
-        //장바구니 만료일시를 업데이트한다.
-        cart.updateCartExpriedAt();
 
         //이미 존재하는 Menu이지 확인한다.
         Optional<CartItem> cartItem = cartItemRepository.findByCartIdAndMenuId(cart.getId(), menu.getId());
@@ -86,6 +83,9 @@ public class CartService {
             existing.updateQuantity(existing.getQuantity() + createCartItemRequest.getQuantity());
             return ;
         }
+
+        //장바구니 만료일시를 업데이트한다.
+        cart.updateCartExpriedAt();
 
         //존재하지 않는 메뉴라면 cartItem에 추가한다.
         cartItemRepository.save(CartItem.createCartItem(cart, menu, createCartItemRequest.getQuantity()));
@@ -107,6 +107,9 @@ public class CartService {
 
         //장바구니 유효성 검사
         validateCartIsNotExpired(cartItem.getCart());
+
+        //만료시간 업데이트
+        cartItem.getCart().updateCartExpriedAt();
 
         //수량이 0 이하일 경우 삭제
         if(updateCartItemRequest.getQuantity() <= 0){

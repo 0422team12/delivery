@@ -32,13 +32,14 @@ public class Cart { //장바구니
 
     private LocalDateTime expiredAt;             //장바구니 만료 시간, 수동 업데이트
 
-    private Cart (User user, Store store){
+    private Cart (User user, Store store, LocalDateTime expiredAt){
         this.user = user;
         this.store = store;
+        this.expiredAt = expiredAt;
     }
 
-    public static Cart createCart(User user, Store store){
-        return new Cart(user, store);
+    public static Cart createCart(User user, Store store, LocalDateTime expiredAt){
+        return new Cart(user, store, expiredAt);
     }
 
     public void updateCartExpriedAt(){
