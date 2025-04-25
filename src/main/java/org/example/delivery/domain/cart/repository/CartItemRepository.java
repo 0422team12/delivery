@@ -13,20 +13,24 @@ import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-    default CartItem findByIdOrElseThrow(Long cartId){
+    default CartItem findByIdOrElseThrow(Long cartId) {
         return findById(cartId).orElseThrow();
     }
 
     //DTO Projection
     @Query("""
-            SELECT new org.example.delivery.domain.cart.dto.response.CartItemResponse (
-                ci.id, m.id, m.name, ci.quantity, ci.priceSnapshot
-            )
-            FROM CartItem ci
-            JOIN ci.menu m
-            WHERE ci.cart.id = :cartId
-    """)
+                    SELECT new org.example.delivery.domain.cart.dto.response.CartItemResponse (
+                        ci.id, m.id, m.name, ci.quantity, ci.priceSnapshot
+                    )
+                    FROM CartItem ci
+                    JOIN ci.menu m
+                    WHERE ci.cart.id = :cartId
+            """)
     List<CartItemResponse> findAllByCartId(@Param("cartId") Long cartId);
+
+    @Query("SELECT ci FROM CartItem ci WHERE ci.cart.id = :cartId")
+    List<CartItem> findCartItemsByCartId(@Param("cartId") Long cartId);
+
 
     Optional<CartItem> findByCartIdAndMenuId(Long cartId, Long menuId);
 

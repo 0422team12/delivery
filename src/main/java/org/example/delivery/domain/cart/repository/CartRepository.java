@@ -9,12 +9,14 @@ import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
     Optional<Cart> findByUserId(Long userId);
-    default Cart findByUserIdOrElseThrow(Long userId){
+
+    default Cart findByUserIdOrElseThrow(Long userId) {
         return findByUserId(userId).orElseThrow();
     }
 
     Optional<Cart> findByUserIdAndExpiredAtAfter(Long userId, LocalDateTime expiredAtAfter);
-    default Cart findByUserIdAndExpiredAtAfterOrElseThrow(Long userId, LocalDateTime expiredAtAfter){
+
+    default Cart findByUserIdAndExpiredAtAfterOrElseThrow(Long userId, LocalDateTime expiredAtAfter) {
         return findByUserIdAndExpiredAtAfter(userId, expiredAtAfter).orElseThrow();
     }
 

@@ -32,25 +32,25 @@ public class Cart { //장바구니
 
     private LocalDateTime expiredAt;             //장바구니 만료 시간, 수동 업데이트
 
-    private Cart (User user, Store store, LocalDateTime expiredAt){
+    private Cart(User user, Store store, LocalDateTime expiredAt) {
         this.user = user;
         this.store = store;
         this.expiredAt = expiredAt;
     }
 
-    public static Cart createCart(User user, Store store, LocalDateTime expiredAt){
+    public static Cart createCart(User user, Store store, LocalDateTime expiredAt) {
         return new Cart(user, store, expiredAt);
     }
 
-    public void updateCartExpriedAt(){
+    public void updateCartExpriedAt() {
         this.expiredAt = LocalDateTime.now().plusDays(1);
     }
 
-    public boolean isExpired(){
+    public boolean isExpired() {
         return this.expiredAt.isBefore(LocalDateTime.now());
     }
 
-    public boolean isEqualStoreId(Long storeId){
+    public boolean isEqualStoreId(Long storeId) {
         return this.store.getId().equals(storeId); //추후 store entity의 메서드에 따라 변경 가능성
     }
 
