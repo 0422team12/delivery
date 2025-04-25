@@ -3,7 +3,7 @@ package org.example.delivery.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.example.delivery.domain.user.enums.UserRole;
 
 
 @Entity
@@ -16,13 +16,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
 
-//    private Enum userrole;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
+    public User(String email, String password, UserRole userRole) {
+        this.email = email;
+        this.password = password;
+        this.userRole = userRole;
+    }
 
 }
