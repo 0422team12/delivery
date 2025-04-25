@@ -20,10 +20,10 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     @ManyToOne
     private User owner;
-
-    private String name;
 
     private LocalTime openingTime;
 
