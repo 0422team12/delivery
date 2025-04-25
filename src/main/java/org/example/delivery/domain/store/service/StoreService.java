@@ -35,10 +35,11 @@ public class StoreService {
         }
 
         Long userId = (Long) request.getAttribute("userId");
+
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        if(storeRepository.countByOwner(owner) >= 3){
+        if(storeRepository.countByOwnerAndIsClosedFalse(owner) >= 3) {
             throw new IllegalArgumentException("가게는 최대 3개까지만 생성할 수 있습니다.");
         }
 
@@ -74,7 +75,6 @@ public class StoreService {
     }
 
     // 가게 단건 조회
-    // todo : return시 메뉴리스트 추가해야함
     public StoreDetailResponseDto getStoreById(Long storeId) {
 
         Store store = storeRepository.findById(storeId)
