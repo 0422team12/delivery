@@ -26,7 +26,7 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> createOrder(@RequestAttribute("userId") Long userId,
                                                         @Valid @RequestBody OrderRequestDto dto) {
 
-        OrderResponseDto createOrder = orderService.createOrder(userId, dto.getCartId(),dto.getAddress());
+        OrderResponseDto createOrder = orderService.createOrder(userId/*,dto.getCartId()*/,dto.getAddress());
         return new ResponseEntity<>(createOrder, HttpStatus.CREATED);
     }
     //주문단건조회(본인 주문건만 조회가능)
@@ -42,6 +42,8 @@ public class OrderController {
     public ResponseEntity<List<FindAllOrderResponseDto>> findAllOrders(@RequestAttribute("userId") Long userId){
         List<FindAllOrderResponseDto> findAllOrders = orderService.findAllOrders(userId);
         return new ResponseEntity<>(findAllOrders,HttpStatus.OK);
+
+
     }
     //주문취소-order status PENDING 인 경우만 취소 가능
     @DeleteMapping("/orders/{orderId}")
@@ -50,6 +52,7 @@ public class OrderController {
         orderService.cancelOrder(userId,orderId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     //주문상태 수정(OWNER)
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderResponseDto> updateOrder(@RequestAttribute("userId") Long userId,

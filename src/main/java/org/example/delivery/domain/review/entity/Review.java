@@ -40,8 +40,6 @@ public class Review {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     public static Review of(Order order, int rating, String content) {
         Review review = new Review();

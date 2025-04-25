@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderRequestDto {
 
-    @NotNull
-    private final Long cartId;
+//    @NotNull
+//    private final Long cartId;
 
     @NotBlank
     private final String address;

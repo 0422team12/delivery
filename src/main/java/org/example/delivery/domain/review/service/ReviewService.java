@@ -65,7 +65,7 @@ public class ReviewService {
     }
 
     public List<ReviewResponseDto> findStoreReviewByRating(Long storeId, int minRating, int maxRating) {
-        List<Review> byRatingBetween = reviewRepository.findByRatingBetween(minRating, maxRating);
+        List<Review> byRatingBetween = reviewRepository.findByStoreIdAndRatingBetween(storeId,minRating, maxRating);
         if(byRatingBetween.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NO_CONTENT,"작성된 리뷰가 없습니다");
         }

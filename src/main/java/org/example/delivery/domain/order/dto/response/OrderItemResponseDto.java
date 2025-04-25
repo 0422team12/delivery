@@ -15,7 +15,7 @@ public class OrderItemResponseDto {
 
     public static OrderItemResponseDto toDto(OrderItem item){
         return new OrderItemResponseDto(
-                item.getMenu().getName(),
+                item.getMenuName(),
                 item.getQuantity(),
                 item.getPrice(),
                 item.getQuantity()* item.getPrice()

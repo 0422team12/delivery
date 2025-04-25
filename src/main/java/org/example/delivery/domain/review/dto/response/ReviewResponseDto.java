@@ -1,6 +1,5 @@
 package org.example.delivery.domain.review.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.review.entity.Review;
@@ -17,9 +16,6 @@ public class ReviewResponseDto {
     private final String content;  //리뷰
     private final LocalDateTime createdAt; //리뷰등록일
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private final LocalDateTime updatedAt; //리뷰수정일
-
 
     public static ReviewResponseDto toDto(Review review) {
         return new ReviewResponseDto(
@@ -27,8 +23,7 @@ public class ReviewResponseDto {
                 review.getStore().getName(),
                 review.getRating(),
                 review.getContent(),
-                review.getCreatedAt(),
-                review.getUpdatedAt()
+                review.getCreatedAt()
         );
     }
 }

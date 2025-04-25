@@ -4,6 +4,7 @@ package org.example.delivery.domain.order.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.delivery.domain.cart.entity.Cart;
 import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
@@ -31,7 +32,7 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderItem> orderItem;
 
     private String address;
@@ -68,16 +69,17 @@ public class Order {
     }
 
 
-    public static Order of(User user, Store store, List<OrderItem> orderItem, String address) {
+    public static Order of(Cart cart, Store store, List<OrderItem> orderItem, String address) {
         Order order = new Order();
-        order.user = user;
+        order.user = cart.getUser();
         order.store = store;
         order.orderItem = orderItem;
         order.address = address;
         order.status = Status.PENDING;
         order.orderedAt = LocalDateTime.now();
-
-        //order.totalPrice; 리스트금액 전부합산
+        order.totalPrice=orderItem.stream().
+                mapToInt(item->item.getPrice()*item.getQuantity())
+                .sum();
         return order;
     }
 }
