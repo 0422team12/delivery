@@ -4,9 +4,7 @@ package org.example.delivery.domain.order.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.example.delivery.domain.cart.entity.Cart;
-import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,6 @@ import java.util.List;
 @Getter
 @Table(name = "orders")
 @NoArgsConstructor
-@Setter
 public class Order {
 
     @Id
