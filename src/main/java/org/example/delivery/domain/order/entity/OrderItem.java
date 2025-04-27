@@ -22,6 +22,10 @@ public class OrderItem {
     private int quantity;
     private int price;
 
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public static OrderItem of(CartItem cartItem){ //장바구니 목록가져오기
         OrderItem orderItem =new OrderItem();
         orderItem.menuName=cartItem.getMenu().getName();

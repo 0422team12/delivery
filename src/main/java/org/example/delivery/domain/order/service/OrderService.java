@@ -54,15 +54,18 @@ public class OrderService {
         }
         //해당가게가 닫혔는지,영업시간인지 확인
         Store store = cart.getStore();
+
         LocalTime now = LocalTime.now();
-        if (!store.isClosed() && //가게상태 open = false 이고
-                now.isAfter(store.getClosingTime()) && //현재시간이 마감시간 이후거나
-                now.isBefore(store.getOpeningTime())) { //현지사간이 오픈시간 전이면
+        boolean isOperating = !now.isBefore(store.getOpeningTime())//현재시간<오픈타임
+                && !now.isAfter(store.getClosingTime());  //현재시간>마감시간
+
+        if (!store.isClosed() && !isOperating){//가게상태 open = false 이고
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "가게가 운영중이지 않습니다.");
         }
 
         //cartItem - > orderItem / cart_id,menu_id,quantity,price
         List<OrderItem> orderItems = findAllByCart.stream().map(OrderItem::of).collect(Collectors.toList());
+
         Order order = Order.of(cart, store, orderItems, address);
         orderRepository.save(order);
 

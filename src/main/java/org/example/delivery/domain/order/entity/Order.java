@@ -4,6 +4,7 @@ package org.example.delivery.domain.order.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.delivery.domain.cart.entity.Cart;
 import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.store.entity.Store;
@@ -12,12 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "orders")
 @NoArgsConstructor
+@Setter
 public class Order {
 
     @Id
@@ -33,7 +36,7 @@ public class Order {
     private Store store;
 
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<OrderItem> orderItem;
+    private List<OrderItem> orderItem=new ArrayList<>();
 
     private String address;
 
@@ -73,7 +76,7 @@ public class Order {
         Order order = new Order();
         order.user = cart.getUser();
         order.store = store;
-        order.orderItem = orderItem;
+        order.orderItem = orderItem.stream().peek(item -> item.setOrder(order)).toList();
         order.address = address;
         order.status = Status.PENDING;
         order.orderedAt = LocalDateTime.now();
