@@ -36,17 +36,10 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
 
     @Transactional
-    public OrderResponseDto createOrder(Long userId/*, Long cartId*/, String address) {
-//        User user = userRepository.findById(userId).
-//                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."));
-        //로그인한 유저라 검증과정 필요없음.
-
+    public OrderResponseDto createOrder(Long userId, String address) {
         Cart cart = cartRepository.findByUserId(userId).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "장바구니를 찾을 수 없습니다."));
 
-//        if (!cart.getUser().getId().equals(userId)) {
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "내 장바구니가 아닙니다.");
-//        } 로그인계정으로 찾는거라 검증과정필요없음
 
         List<CartItem> findAllByCart = cartItemRepository.findCartItemsByCartId(cart.getId());
         if (findAllByCart.isEmpty()) {
@@ -56,17 +49,22 @@ public class OrderService {
         Store store = cart.getStore();
 
         LocalTime now = LocalTime.now();
-        boolean isOperating = !now.isBefore(store.getOpeningTime())//현재시간<오픈타임
-                && !now.isAfter(store.getClosingTime());  //현재시간>마감시간
+        boolean isOperating = now.isAfter(store.getOpeningTime())
+                && now.isBefore(store.getClosingTime());   //현재시간>마감시간
 
-        if (!store.isClosed() && !isOperating){//가게상태 open = false 이고
+        if (store.isClosed() || !isOperating) {//가게상태 open = false 이고
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "가게가 운영중이지 않습니다.");
         }
 
-        //cartItem - > orderItem / cart_id,menu_id,quantity,price
-        List<OrderItem> orderItems = findAllByCart.stream().map(OrderItem::of).collect(Collectors.toList());
 
-        Order order = Order.of(cart, store, orderItems, address);
+        Order order = Order.of(cart, store, address);
+
+        //cartItem - > orderItem / cart_id,menu_id,quantity,price
+        List<OrderItem> orderItems = findAllByCart.stream()
+                .map(cartItem -> OrderItem.of(cartItem, order)).collect(Collectors.toList());
+        order.getOrderItem().addAll(orderItems); //오더에 주문리스트 주입
+
+        order.calculateTotalPrice(orderItems);
         orderRepository.save(order);
 
         log.info("로깅- 요청시각 : {},가게 ID : {},주문 ID : {}",

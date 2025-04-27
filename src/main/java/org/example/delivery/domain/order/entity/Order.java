@@ -35,8 +35,8 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<OrderItem> orderItem=new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItem = new ArrayList<>();
 
     private String address;
 
@@ -72,19 +72,21 @@ public class Order {
     }
 
 
-    public static Order of(Cart cart, Store store, List<OrderItem> orderItem, String address) {
+    public static Order of(Cart cart, Store store, String address) {
         Order order = new Order();
         order.user = cart.getUser();
         order.store = store;
-        order.orderItem = orderItem.stream().peek(item -> item.setOrder(order)).toList();
         order.address = address;
         order.status = Status.PENDING;
         order.orderedAt = LocalDateTime.now();
-        order.totalPrice=orderItem.stream().
-                mapToInt(item->item.getPrice()*item.getQuantity())
-                .sum();
         return order;
     }
-}
 
+    public void calculateTotalPrice(List<OrderItem> orderItems) {
+        this.totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            this.totalPrice += orderItem.getPrice() * orderItem.getQuantity();
+        }
+    }
+}
 
