@@ -20,10 +20,10 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     @ManyToOne
     private User owner;
-
-    private String name;
 
     private LocalTime openingTime;
 
@@ -65,8 +65,8 @@ public class Store {
         this.isClosed = true;
     }
 
+    public boolean isOverMinOrderValue(Long totalPrice){
+        return totalPrice >= this.minOrderValue;
+    }
 
 }
-
-
-
