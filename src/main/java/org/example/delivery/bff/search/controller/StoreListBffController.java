@@ -8,6 +8,7 @@ import org.example.delivery.domain.ad.service.AdService;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.store.service.StoreService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,7 @@ public class StoreListBffController {
         );
 
 
-        return ResponseEntity.ok(res);
+        return new ResponseEntity<>(res, HttpStatus.OK);
 
     }
 

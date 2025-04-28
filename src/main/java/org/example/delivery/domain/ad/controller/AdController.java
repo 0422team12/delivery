@@ -27,7 +27,7 @@ public class AdController {
             ){
         Long adId = adService.applyAd(userId, storeId, dto);
 
-        return new ResponseEntity<>(adId, HttpStatus.OK);
+        return new ResponseEntity<>(adId, HttpStatus.CREATED);
     }
 
     @GetMapping("/{adId}")
