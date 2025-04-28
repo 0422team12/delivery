@@ -52,14 +52,12 @@ public class MenuController {
 
     // 메뉴 삭제
     @DeleteMapping("/{menuId}")
-    public ResponseEntity<Void> deleteMenu(
+    public ResponseEntity<String> deleteMenu(
             @PathVariable Long menuId,
             HttpServletRequest request
     ) {
         menuService.deleteMenu(menuId, request);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>("삭제 되었습니다.", HttpStatus.NO_CONTENT);
     }
-
-    // + 메뉴 조회는 가게 조회시 함께 조회
 
 }
