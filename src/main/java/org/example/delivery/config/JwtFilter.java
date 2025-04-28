@@ -8,9 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.common.JwtUtil;
 import org.example.delivery.domain.user.enums.UserRole;
+import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 // http request 한번의 요청에 대해 한번만 실행하는 Filter
@@ -18,6 +21,14 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+
+    private static final String[] WHITE_LIST = {
+            "/login",
+            "/signup",
+            "/login/kakao",
+            "/login/kakao/callback",
+            "/auth"
+    };
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -27,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String url = request.getRequestURI();
 
-        if(url.startsWith("/auth")) {
+        if(isWhiteList(url)) {
             chain.doFilter(request, response);
             return;
         }
@@ -53,5 +64,9 @@ public class JwtFilter extends OncePerRequestFilter {
         request.setAttribute("userRole", claims.get("userRole"));
 
         chain.doFilter(request, response);
+    }
+
+    private boolean isWhiteList(String requestURI) {
+        return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }
 }
