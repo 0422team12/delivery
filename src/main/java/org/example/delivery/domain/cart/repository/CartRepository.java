@@ -18,7 +18,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     Optional<Cart> findByUserIdAndExpiredAtAfter(Long userId, LocalDateTime expiredAtAfter);
 
     default Cart findByUserIdAndExpiredAtAfterOrElseThrow(Long userId, LocalDateTime expiredAtAfter) {
-        return findByUserIdAndExpiredAtAfter(userId, expiredAtAfter).orElseThrow();
+        return findByUserIdAndExpiredAtAfter(userId, expiredAtAfter).orElseThrow(CartNotFoundException::new);
     }
 
     List<Cart> findAllByExpiredAtBefore(LocalDateTime expiredAtBefore);
