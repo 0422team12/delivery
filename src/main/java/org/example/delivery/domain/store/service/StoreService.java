@@ -43,12 +43,11 @@ public class StoreService {
             throw new IllegalArgumentException("가게는 최대 3개까지만 생성할 수 있습니다.");
         }
 
-        Store store = new Store(
+        Store store = Store.createStore(
                 owner,
                 name,
                 openingTime,
                 closingTime,
-                false,
                 minOrderValue
         );
 
@@ -114,10 +113,7 @@ public class StoreService {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 접근 가능
         }
 
-        store.updateName(name);
-        store.updateOpeningTime(openingTime);
-        store.updateClosingTime(closingTime);
-        store.updateMinOrderValue(minOrderValue);
+        store.update(name,openingTime,closingTime,minOrderValue);
 
         Store updated = storeRepository.save(store);
 
