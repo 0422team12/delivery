@@ -15,6 +15,7 @@ import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class StoreService {
     private final UserRepository userRepository;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
-    public StoreResponseDto createStore(StoreRequestDto requestDto, HttpServletRequest request) {
+    public StoreResponseDto createStore(String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue, HttpServletRequest request) {
 
         UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // userroll 추출
 
@@ -45,12 +46,12 @@ public class StoreService {
 
         Store store = new Store(
                 owner,
-                requestDto.getName(),
-                requestDto.getOpeningTime(),
-                requestDto.getClosingTime(),
+                name,
+                openingTime,
+                closingTime,
                 false,
-                requestDto.getMinOrderValue()
-        ); // 저장되어야 할 정보 : request로 받아온 가게이름,오픈시간,클로징시간,최소주문금액 & 사장님 이름(?? 어떻게 저장)
+                minOrderValue
+        );
 
         Store saved = storeRepository.save(store);
 
@@ -103,7 +104,7 @@ public class StoreService {
 
     // 가게 수정
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, HttpServletRequest request, StoreRequestDto requestDto) {
+    public StoreResponseDto updateStore(Long storeId, String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue, HttpServletRequest request) {
 
         Long userId = (Long) request.getAttribute("userId");
 
@@ -114,20 +115,20 @@ public class StoreService {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 접근 가능
         }
 
-        if (requestDto.getName() != null) {
-            store.updateName(requestDto.getName());
+        if (name != null) {
+            store.updateName(name);
         }
 
-        if (requestDto.getOpeningTime() != null) {
-            store.updateOpeningTime(requestDto.getOpeningTime());
+        if (openingTime != null) {
+            store.updateOpeningTime(openingTime);
         }
 
-        if (requestDto.getClosingTime() != null) {
-            store.updateClosingTime(requestDto.getClosingTime());
+        if (closingTime != null) {
+            store.updateClosingTime(closingTime);
         }
 
-        if (requestDto.getMinOrderValue() != null) {
-            store.updateMinOrderValue(requestDto.getMinOrderValue());
+        if (minOrderValue != null) {
+            store.updateMinOrderValue(minOrderValue);
         }
 
         Store updated = storeRepository.save(store);

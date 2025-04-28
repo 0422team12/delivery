@@ -23,10 +23,16 @@ public class StoreController {
     // 가게 생성 post
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
-            HttpServletRequest request,
-            @Valid @RequestBody StoreRequestDto requestDto
+            @Valid @RequestBody StoreRequestDto requestDto,
+            HttpServletRequest request
     ){
-        StoreResponseDto responseDto = storeService.createStore(requestDto,request);
+        StoreResponseDto responseDto = storeService.createStore(
+                requestDto.getName(),
+                requestDto.getOpeningTime(),
+                requestDto.getClosingTime(),
+                requestDto.getMinOrderValue(),
+                request
+        );
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); //201
     }
 
@@ -51,10 +57,17 @@ public class StoreController {
     @PatchMapping("/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(
             @PathVariable Long storeId,
-            HttpServletRequest request,
-            @RequestBody StoreRequestDto requestDto
+            @RequestBody StoreRequestDto requestDto,
+            HttpServletRequest request
     ) {
-        StoreResponseDto responseDto = storeService.updateStore(storeId, request, requestDto);
+        StoreResponseDto responseDto = storeService.updateStore(
+                storeId,
+                requestDto.getName(),
+                requestDto.getOpeningTime(),
+                requestDto.getClosingTime(),
+                requestDto.getMinOrderValue(),
+                request
+        );
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
