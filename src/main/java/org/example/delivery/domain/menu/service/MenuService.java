@@ -31,12 +31,7 @@ public class MenuService {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 
-        Menu menu = new Menu(
-                store,
-                name,
-                price,
-                content
-                );
+        Menu menu = Menu.createMenu(store, name, price, content);
 
         Menu savedMenu = menuRepository.save(menu);
 
