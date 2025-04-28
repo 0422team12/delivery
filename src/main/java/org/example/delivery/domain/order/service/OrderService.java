@@ -3,6 +3,7 @@ package org.example.delivery.domain.order.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.delivery.common.EmailService;
 import org.example.delivery.domain.cart.entity.Cart;
 import org.example.delivery.domain.cart.entity.CartItem;
 import org.example.delivery.domain.cart.repository.CartItemRepository;
@@ -17,6 +18,7 @@ import org.example.delivery.domain.order.exception.OrderForbiddenException;
 import org.example.delivery.domain.order.exception.OrderNotFoundException;
 import org.example.delivery.domain.order.repository.OrderRepository;
 import org.example.delivery.domain.store.entity.Store;
+import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final EmailService emailService;
 
     @Transactional
     public OrderResponseDto createOrder(Long userId, String address) {
@@ -121,6 +124,8 @@ public class OrderService {
         }
         try {
             order.updateStatus(orderStatus);
+            User user = order.getUser();
+            emailService.sendEmail(user.getEmail(),"배달앱 주문 알림", order.getStatus().getMessage());
         } catch (IllegalArgumentException e) {
             throw new OrderBadRequestException( "유효하지 않은 주문 상태입니다.");
         }

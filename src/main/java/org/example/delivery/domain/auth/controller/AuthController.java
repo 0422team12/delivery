@@ -1,15 +1,16 @@
 package org.example.delivery.domain.auth.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.auth.dto.LoginRequestDto;
 import org.example.delivery.domain.auth.dto.LoginResponseDto;
 import org.example.delivery.domain.auth.dto.SignupRequestDto;
 import org.example.delivery.domain.auth.service.AuthService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -20,8 +21,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Validated @RequestBody SignupRequestDto requestDto) {
-        authService.signup(requestDto.getEmail(), requestDto.getPassword(), requestDto.getUserRole());
-
+        try {
+            authService.signup(requestDto.getEmail(), requestDto.getPassword(), requestDto.getUserRole());
+        } catch(DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("이미 사용된 이메일");
+        }
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
@@ -32,15 +36,4 @@ public class AuthController {
         return new ResponseEntity<>(loginToken, HttpStatus.OK);
     }
 
-    @GetMapping("/checkid")
-    public Long checkId(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-        return userId;
-    }
-
-    @GetMapping("/checkemail")
-    public String checkemail(HttpServletRequest request) {
-        String email = (String) request.getAttribute("email");
-        return email;
-    }
 }
