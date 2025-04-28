@@ -48,7 +48,7 @@ public class OrderService {
 //            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "내 장바구니가 아닙니다.");
 //        } 로그인계정으로 찾는거라 검증과정필요없음
 
-        List<CartItem> findAllByCart = cartItemRepository.findAllByCart(cart.getId());
+        List<CartItem> findAllByCart = cartItemRepository.findCartItemsByCartId(cart.getId());
         if (findAllByCart.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "장바구니에 담긴 메뉴가 없습니다..");
         }
@@ -69,7 +69,7 @@ public class OrderService {
         log.info("로깅- 요청시각 : {},가게 ID : {},주문 ID : {}",
                 LocalDateTime.now(), store.getId(), order.getId());
         //장바구니삭제
-//        cartRepository.deleteById(cart.getId());
+        cartRepository.deleteById(cart.getId());
 
         return OrderResponseDto.toDto(order);
     }

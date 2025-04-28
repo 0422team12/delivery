@@ -65,8 +65,8 @@ public class Store {
         this.isClosed = true;
     }
 
+    public boolean isOverMinOrderValue(Long totalPrice){
+        return totalPrice >= this.minOrderValue;
+    }
 
 }
-
-
-

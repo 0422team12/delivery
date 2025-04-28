@@ -1,12 +1,10 @@
 package org.example.delivery.domain.menu.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.store.entity.Store;
 
-import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name="menus")
