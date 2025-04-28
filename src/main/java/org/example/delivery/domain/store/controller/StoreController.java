@@ -61,11 +61,12 @@ public class StoreController {
 
     // 가게 삭제(폐업)
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<Void> closeStore(
+    public ResponseEntity<String> closeStore(
             @PathVariable Long storeId,
-            HttpServletRequest request) {
+            HttpServletRequest request
+    ) {
         storeService.closeStore(storeId, request);
-        return ResponseEntity.noContent().build(); // 204
+        return new ResponseEntity<>("삭제 되었습니다.", HttpStatus.NO_CONTENT);
     }
 
 
