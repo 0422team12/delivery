@@ -60,7 +60,7 @@
 ### 주문
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
-주문(결제) | POST | /orders | { <br>”address”:주소 <br>} | { <br>"orderId": 1,<br> "userId": 1234,<br> "storeName": "Pizza Palace",<br> "status": "PENDING",<br> "items":[ { <br>"itemId":1, <br>"menuName":"메뉴1",<br> "quantity":2,<br> "price":3500,<br> "totalPrice":quantity*price<br> } <br>totalPrice : 7000, <br>"address": "대전광역시",<br> "orderedAt":"2025-04-25",<br> "deliveredAt": null<br> } | 201 CREATED
+주문(결제) | POST | /orders | { <br>”address”:주소 <br>} | { <br>"orderId": 1,<br> "userId": 1234,<br> "storeName": "Pizza Palace",<br> "status": "PENDING",<br> "items":<br>[ <br>{ <br>"itemId":1, <br>"menuName":"메뉴1",<br> "quantity":2,<br> "price":3500,<br> "totalPrice":quantity*price<br> } <br>totalPrice : 7000, <br>"address": "대전광역시",<br> "orderedAt":"2025-04-25",<br> "deliveredAt": null<br> } | 201 CREATED
 주문 조회 | GET | /orders/{orderId} |   | 위와 같음 | 200 OK
 주문 전체조회 | GET | /orders | {  <br> "quantity": 2<br> } | [ <br>{ <br>"orderId": 1,<br> "storeId": 1,<br> "storeName": "식당이름1",<br> "menuName": "[메뉴1,메뉴2]", <br>"totalPrice": 10000,<br> "status": "PENDING",<br> "orderedAt": "2025-04-25T18:53:02.636048" <br>}, { <br>"orderId": 2,<br> "storeId": 2,<br> "storeName": "식당이름2", <br>"menuName": "[메뉴3,메뉴4]",<br> "totalPrice": 10000, <br>"status": "PENDING", <br>"orderedAt": "2025-04-25T18:53:02.636048"<br> }<br> ] | 200 OK
 주문 수정 | PATCH | /orders/{orderId} |   | { <br>"orderId": 1,<br> "userId": 1234,<br> "storeName": "Pizza Palace", <br>"status": COOKING, <br>"items":<br>[<br> ….<br>} | 200 OK
@@ -78,7 +78,7 @@
 ### 대시보드
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
-대시보드 메인 | GET | /dashboard | {  <br> “stores” : <br>{   <br>   ”store1”: [       “(category)”, “(ads)”, “(sales), …”],     “store2”:[ … ] <br>}<br>} |   |  
+대시보드 메인 | GET | /dashboard | {  <br> “stores” : <br>{   <br>   ”store1”: [       “(category)”, “(ads)”, “(sales), …”],<br>     “store2”:[ … ] <br>}<br>} |   |  
 관리자 페이지 | GET | /admin |   |   | 200 OK
 가게 상세 | GET | /dashboard/{storeId} |   |   |  
 광고 조회 | GET | /dashboard/{storeId}/ads |   |   |  
