@@ -25,7 +25,7 @@
 <img width="1066" alt="Image" src="https://github.com/user-attachments/assets/9e0de846-6c0e-47a0-b9e0-08ce4ddd5d4a" />
 
 ## 🗒️　API
-### 회원관리
+### < 회원관리 >
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
 회원가입 | POST | /auth/signup |   |   | 201 CREATED
