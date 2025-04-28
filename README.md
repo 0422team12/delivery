@@ -17,7 +17,7 @@
 회원가입 / 로그인 | 김정연
 메뉴 / 가게 CRUD | 이진아
 주문 / 리뷰 CRUD | 류형철
-부가서비스 / 광고 / 대시보드 | 이형진
+광고 / 전역 예외 | 이형진
 소셜 로그인 / 장바구니 / 알림 | 이수빈
 테스트코드 및 예외 | 공통사항
 
@@ -75,14 +75,9 @@
 가게 리뷰 평점별로 조회 | GET | /stores/{storeId}/reviews",<br> params = {"minRating", "maxRating"} |   | 위와 같음 | 200 OK
 리뷰 삭제 | DELETE | /reviews/{reviewId} |   |   | 200 OK
 
-### < 대시보드 >
-기능 | HTTP Method | URL | Request | Response | status
--- | -- | -- | -- | -- | --
-대시보드 메인 | GET | /dashboard | {  <br> “stores” : <br>{   <br>   ”store1”: [       “(category)”, “(ads)”, “(sales), …”],<br>     “store2”:[ … ] <br>}<br>} |   |  
-관리자 페이지 | GET | /admin |   |   | 200 OK
-가게 상세 | GET | /dashboard/{storeId} |   |   |  
-광고 조회 | GET | /dashboard/{storeId}/ads |   |   |  
-광고 생성 | POST | /dashboard/{storeId}/ads |   |   |  
-광고 편집 | PATCH | /dashboard/{storeId}/ads/{adId} |   |   |  
-광고 초기화 | DELETE | /dashboard/{storeId}/ads/ |   |   |  
-광고 삭제 | DELETE | /dashboard/{storeId}/ads/{adId} |   |   |  
+### < 광고 >
+ 기능            | HTTP Method | URL                          | Request                                                                                                             | Response                                                                                                                                 | status 
+---------------|-------------|------------------------------|---------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------
+ 광고 생성         | POST        | /stores/{storeId}/ads        | {<br>	"startAt":"2025-04-28T14:30:00",<br>	"endAt":"2025-05-28T14:30:00",<br>	"isActive":true,<br>	"priority":1<br>} | {adId}                                                                                                                                   | 201 Created
+ 광고 상세         | GET         | /stores/{storeId}/ads/{adId} |                                                                                                                     | {<br>	"id":1,<br>	"storeId":3,<br>	"startAt":"2025-04-22T00:30:00",<br>	"endAt":"2025-05-28T23:30:00"<br>}                               | 200 OK
+ 상점 조회 (광고 포함) | GET         | /bff/store-list              | ?name=                                                                                                              | [{<br>"id": 7,<br>"name": "store1-1",<br>"openingTime": "08:00:00",<br>"closingTime": "22:00:00",<br>"minOrderValue": 0<br>}, {...}<br>] | 200 OK
