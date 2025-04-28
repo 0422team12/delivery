@@ -1,12 +1,13 @@
 package org.example.delivery.domain.store.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.domain.store.dto.StoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreCreateRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
+import org.example.delivery.domain.store.dto.StoreUpdateRequestDto;
 import org.example.delivery.domain.store.service.StoreService;
+import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,15 @@ public class StoreController {
     // 가게 생성 post
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
-            HttpServletRequest request,
-            @Valid @RequestBody StoreRequestDto requestDto
+            @Valid @RequestBody StoreCreateRequestDto requestDto,
+            @RequestAttribute("userId") Long userId,
+            @RequestAttribute("userRole") UserRole userRole
     ){
-        StoreResponseDto responseDto = storeService.createStore(requestDto,request);
+        StoreResponseDto responseDto = storeService.createStore(
+                requestDto,
+                userId,
+                userRole
+        );
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); //201
     }
 
@@ -48,24 +54,28 @@ public class StoreController {
 
 
     // 가게 수정
-    @PatchMapping("/{storeId}")
+    @PutMapping("/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(
             @PathVariable Long storeId,
-            HttpServletRequest request,
-            @RequestBody StoreRequestDto requestDto
+            @RequestBody StoreUpdateRequestDto requestDto,
+            @RequestAttribute("userId") Long userId
     ) {
-        StoreResponseDto responseDto = storeService.updateStore(storeId, request, requestDto);
+        StoreResponseDto responseDto = storeService.updateStore(
+                storeId,
+                requestDto,
+                userId
+        );
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-
     // 가게 삭제(폐업)
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<Void> closeStore(
+    public ResponseEntity<String> closeStore(
             @PathVariable Long storeId,
-            HttpServletRequest request) {
-        storeService.closeStore(storeId, request);
-        return ResponseEntity.noContent().build(); // 204
+            @RequestAttribute("userId") Long userId
+    ) {
+        storeService.closeStore(storeId, userId);
+        return new ResponseEntity<>("삭제 되었습니다.", HttpStatus.NO_CONTENT);
     }
 
 
