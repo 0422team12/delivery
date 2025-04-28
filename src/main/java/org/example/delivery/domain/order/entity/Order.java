@@ -5,10 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.cart.entity.Cart;
+import org.example.delivery.domain.order.exception.OrderBadRequestException;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class Order {
 
     public void updateStatus(String status) {
         if (this.status.equals(Status.CANCELED) || this.status.equals(Status.DELIVERED)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 주문은 변경할 수 없습니다.");
+            throw new OrderBadRequestException( "해당 주문은 변경할 수 없습니다.");
         }
         this.status = Status.valueOf(status.toUpperCase()); //입력받은 문자열을 enum으로 변경
 

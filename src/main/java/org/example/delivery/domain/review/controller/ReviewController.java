@@ -32,6 +32,9 @@ public class ReviewController {
     @GetMapping("users/me/reviews")
     public ResponseEntity<List<ReviewResponseDto>> findMyReviews(@RequestAttribute("userId") Long userId){
         List<ReviewResponseDto> findMyReviews = reviewService.findMyReviews(userId);
+        if(findMyReviews.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(findMyReviews,HttpStatus.OK);
     }
 
@@ -39,6 +42,9 @@ public class ReviewController {
     @GetMapping("/stores/{storeId}/reviews")
     public ResponseEntity<List<ReviewResponseDto>> findStoreReviews(@PathVariable Long storeId){
         List<ReviewResponseDto> findStoreReviews = reviewService.findStoreReviews(storeId);
+        if(findStoreReviews.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(findStoreReviews,HttpStatus.OK);
     }
     //가게 리뷰 평점별로조회
@@ -47,6 +53,9 @@ public class ReviewController {
                                                                            @RequestParam int minRating,
                                                                            @RequestParam int maxRating){
         List<ReviewResponseDto> storeReviewByRating = reviewService.findStoreReviewByRating(storeId, minRating, maxRating);
+        if(storeReviewByRating.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(storeReviewByRating,HttpStatus.OK);
     }
 
