@@ -49,7 +49,7 @@ public class StoreService {
 
         Store saved = storeRepository.save(store);
 
-        return new StoreResponseDto(saved.getId(), saved.getName(), saved.getOpeningTime(), saved.getClosingTime(), saved.getMinOrderValue());
+        return StoreResponseDto.of(saved);
 
     }
 
@@ -59,14 +59,8 @@ public class StoreService {
         List<Store> storeList = storeRepository.findAllByNameContainingAndIsClosedFalse(name); // 폐업하지 않은 가게들만 조회
 
         return storeList.stream()
-                .map(store -> new StoreResponseDto(
-                        store.getId(),
-                        store.getName(),
-                        store.getOpeningTime(),
-                        store.getClosingTime(),
-                        store.getMinOrderValue()
-                )).toList();
-
+                .map(StoreResponseDto::of)
+                .toList();
     }
 
     // 가게 단건 조회
@@ -85,14 +79,10 @@ public class StoreService {
 
         // Menu -> MenuResponseDto 변환
         List<MenuResponseDto> menuResponseDtoList = activeMenus.stream()
-                .map(menu -> new MenuResponseDto(
-                        menu.getId(),
-                        menu.getName(),
-                        menu.getPrice(),
-                        menu.getContent()))
+                .map(MenuResponseDto::of)
                 .collect(Collectors.toList());
 
-        return new StoreDetailResponseDto(store.getId(), store.getName(), store.getOpeningTime(), store.getClosingTime(), store.getMinOrderValue(), menuResponseDtoList);
+        return  StoreDetailResponseDto.of(store, menuResponseDtoList);
 
     }
 
@@ -111,7 +101,7 @@ public class StoreService {
 
         Store updated = storeRepository.save(store);
 
-        return new StoreResponseDto(updated.getId(), updated.getName(), updated.getOpeningTime(), updated.getClosingTime(), updated.getMinOrderValue());
+        return StoreResponseDto.of(updated);
     }
 
     // 가게 삭제
