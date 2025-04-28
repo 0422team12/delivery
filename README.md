@@ -40,7 +40,14 @@
 가게 상세 | GET | /stores/{storeId} |   | { <br>"id": 1,<br> "name": "zzangpizza",<br> "openingTime": "10:00:00", <br>"closingTime": "22:30:00", <br>"minOrderValue": 30000,<br> "menuList": <br>[ <br>{ <br>"id": 1, <br>"name": "SignaturePizza",<br> "price": 28000,<br> "content": "good" <br>}, <br>{<br> "id": 2, <br>"name": "SpicyPizza", <br>"price": 26000, <br>"content": "spicy"<br> } <br>] <br>} | 200 OK
 가게 수정 | PUT | /stores/{storeId} | {<br> "name" : "zzangpizza2", <br>"openingTime" : "10:00",<br> "closingTime": "24:00",<br> "minOrderValue" : 30000 <br>}<br> | {<br> "name" : "zzangpizza2",<br> "openingTime" : "10:00", <br>"closingTime": "24:00",<br> "minOrderValue" : 30000 <br>} | 200 OK
 가게 삭제 | DELETE | /stores/{storeId} |   |   | 204 NO_CONTENT
+
 ### 메뉴
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
+메뉴 생성 | POST | /stores/{storeId}/menus | {<br> ”menu” : “SignaturePizza”, ”price” : 28000, ”content” : “good” <br>} | {<br> "id": 1 ”menu” : “SignaturePizza”, ”price” : 28000, ”content” : “good” <br>} | 201 CREATED
+메뉴 수정 | PUT | /stores/{storeId}/menus/{menuId} | {<br> ”menu” : “SignaturePizza”, ”price” : 30000, ”content” : “good and tasty” <br>} | {<br> "id": 1, ”menu” : “SignaturePizza”, ”price” : 30000, ”content” : “good and tasty” <br>} | 200 OK
+메뉴 삭제 | DELETE | /stores/{storeId}/menus/{menuId} |   |   | 204 NO_CONTENT
+
 ### 카트
 ### 주문
 ### 리뷰
