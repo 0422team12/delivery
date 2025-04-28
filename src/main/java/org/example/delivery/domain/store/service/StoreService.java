@@ -56,7 +56,15 @@ public class StoreService {
     // 가게 조회
     public List<StoreResponseDto> getStoresByName(String name) {
 
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("검색어를 입력해주세요.");
+        }
+
         List<Store> storeList = storeRepository.findAllByNameContainingAndIsClosedFalse(name); // 폐업하지 않은 가게들만 조회
+
+        if (storeList.isEmpty()) { // 검색결과 다 폐업
+            throw new IllegalArgumentException("검색 결과가 없습니다.");
+        }
 
         return storeList.stream()
                 .map(StoreResponseDto::of)
