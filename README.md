@@ -52,7 +52,7 @@
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
 카트 메뉴 추가 | POST | /carts/items | {<br>   "menuId": 123,<br>   "quantity": 2 <br>} |   | 200 OK
-카트 조회 | GET | /carts |   | { <br>”storeId” : store_id, <br>”storeName” : “가게 이름”,<br> ”items” : [   {     "cartItemId": 1,     "menuId": 123,     "menuName": "떡볶이",     "quantity": 2,     "priceSnapshot": 6000    }, /// ], <br>"totalPrice": 12000 <br>} | 200 OK
+카트 조회 | GET | /carts |   | { <br>”storeId” : store_id, <br>”storeName” : “가게 이름”,<br> ”items” :<br> [  <br> {  <br>   "cartItemId": 1,  <br>   "menuId": 123,  <br>   "menuName": "떡볶이",  <br>   "quantity": 2,   <br>  "priceSnapshot": 6000    <br>}, <br>/// <br>], <br>"totalPrice": 12000 <br>} | 200 OK
 카트 메뉴 수량 변경 | PUT | /carts/items/{cartItemId} | {  <br> "quantity": 2 <br>} |   | 200 OK
 카트 단일 메뉴 삭제 | DELETE | /carts/items/{cartItemId} |   |   | 200 OK
 카트 전체 삭제 | DELETE | /carts |   |   | 200 OK
@@ -70,15 +70,15 @@
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
 리뷰 작성 | POST | /orders/{orderId}/reviews | {<br> ”rating”:별점 <br>”content”:리뷰 <br>} | { <br>”reviewId”: 1,<br> ”storeName” : “가게명”, <br>”rating” : 5, <br>”content”: “맛있어요.”<br> ”createdAt”:”2025-04-25” <br>} | 201 CREATED
-내리뷰보기 | GET | /users/me/reviews |   | <br>[ <br>{ <br>”reviewId”: 1,<br> ”storeName” : “가게명”, <br>”rating” : 5, <br>”content”: “맛있어요.” <br>”createdAt”:”2025-04-25” }, <br>{<br> ”reviewId”: 2, <br>”storeName” : “가게명2”, <br>”rating” : 1, <br>”content”: “맛없어요.”<br> ”createdAt”:”2025-04-25”<br> } <br>] | 200 OK
-가게리뷰 조회 | GET | /stores/{storeId}/reviews |   | 위와 같음 | 200 OK
-가게리뷰 평점별로 조회 | GET | /stores/{storeId}/reviews", params = {"minRating", "maxRating"} |   | 위와 같음 | 200 OK
+내 리뷰보기 | GET | /users/me/reviews |   | [ <br>{ <br>”reviewId”: 1,<br> ”storeName” : “가게명”, <br>”rating” : 5, <br>”content”: “맛있어요.” <br>”createdAt”:”2025-04-25” <br>}, <br>{<br> ”reviewId”: 2, <br>”storeName” : “가게명2”, <br>”rating” : 1, <br>”content”: “맛없어요.”<br> ”createdAt”:”2025-04-25”<br> } <br>] | 200 OK
+가게 리뷰 조회 | GET | /stores/{storeId}/reviews |   | 위와 같음 | 200 OK
+가게 리뷰 평점별로 조회 | GET | /stores/{storeId}/reviews",<br> params = {"minRating", "maxRating"} |   | 위와 같음 | 200 OK
 리뷰 삭제 | DELETE | /reviews/{reviewId} |   |   | 200 OK
 
 ### 대시보드
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
-대시보드 메인 | GET | /dashboard | {   “stores” : {      ”store1”: [       “(category)”, “(ads)”, “(sales), …”],     “store2”:[ … ] }} |   |  
+대시보드 메인 | GET | /dashboard | {  <br> “stores” : <br>{   <br>   ”store1”: [       “(category)”, “(ads)”, “(sales), …”],     “store2”:[ … ] <br>}<br>} |   |  
 관리자 페이지 | GET | /admin |   |   | 200 OK
 가게 상세 | GET | /dashboard/{storeId} |   |   |  
 광고 조회 | GET | /dashboard/{storeId}/ads |   |   |  
