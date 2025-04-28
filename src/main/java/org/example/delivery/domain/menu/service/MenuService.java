@@ -32,7 +32,7 @@ public class MenuService {
 
         Menu savedMenu = menuRepository.save(menu);
 
-        return new MenuResponseDto(savedMenu.getId(), savedMenu.getName(), savedMenu.getPrice(), savedMenu.getContent());
+        return MenuResponseDto.of(savedMenu);
     }
 
     // 메뉴 수정
@@ -42,7 +42,6 @@ public class MenuService {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
-
         if (!menu.getStore().getOwner().getId().equals(userId)){ // 메뉴랑 매핑된 가게의 주인의 아이디 가져와서 로그인 아디랑 비교
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
@@ -51,8 +50,7 @@ public class MenuService {
 
         Menu updated = menuRepository.save(menu);
 
-        return new MenuResponseDto(updated.getId(), updated.getName(), updated.getPrice(), updated.getContent());
-        // todo 팩토리메서드 적용
+        return MenuResponseDto.of(updated);
 
     }
 
