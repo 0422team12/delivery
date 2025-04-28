@@ -27,28 +27,21 @@ public class Menu {
 
     private boolean isDeleted;
 
-    public Menu(Store store, String name, Long price, String content, boolean isDeleted) {
+    public Menu(Store store, String name, Long price, String content) {
         this.store = store;
         this.name = name;
         this.price = price;
-        this.content = content;
-        this.isDeleted = isDeleted;
-    }
-
-    public void updateName(String name) {
-        this.name = name;
-    }
-
-    public void updatePrice(Long price) {
-        this.price = price;
-    }
-
-    public void updateContent(String content) {
         this.content = content;
     }
 
     public void isDeletedTrue() {
         this.isDeleted = true;
+    }
+
+    public void update(String name, Long price, String content) {
+        this.name = name;
+        this.price = price;
+        this.content = content;
     }
 
 }
