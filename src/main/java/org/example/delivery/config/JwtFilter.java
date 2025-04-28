@@ -11,9 +11,11 @@ import org.example.delivery.common.JwtUtil;
 import org.example.delivery.domain.user.UserRepository;
 import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
+import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 // http request 한번의 요청에 대해 한번만 실행하는 Filter
@@ -24,6 +26,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
 
+    private static final List<String> WHITE_LIST = List.of(
+            "/auth/**"
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -32,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String url = request.getRequestURI();
 
-        if(url.startsWith("/auth")) {
+        if(isWhiteList(url)) {
             chain.doFilter(request, response);
             return;
         }
@@ -67,5 +73,9 @@ public class JwtFilter extends OncePerRequestFilter {
         request.setAttribute("userRole", claims.get("userRole"));
 
         chain.doFilter(request, response);
+    }
+
+    private boolean isWhiteList(String requestURI) {
+        return PatternMatchUtils.simpleMatch(WHITE_LIST.toArray(new String[0]), requestURI);
     }
 }
