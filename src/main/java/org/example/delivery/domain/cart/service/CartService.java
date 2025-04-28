@@ -81,6 +81,11 @@ public class CartService {
             cart = cartRepository.save(Cart.createCart(user, store, LocalDateTime.now().plusDays(1)));
         }
 
+        //해당 메뉴 또는 가게가 유효한지 확인한다.
+        if(store.isClosed() || menu.isDeleted()){
+            throw new IllegalArgumentException("가게 또는 메뉴가 존재하지 않습니다.");
+        }
+
         //이미 존재하는 Menu이지 확인한다.
         Optional<CartItem> cartItem = cartItemRepository.findByCartIdAndMenuId(cart.getId(), menu.getId());
         if (cartItem.isPresent()) {
