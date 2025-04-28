@@ -20,3 +20,9 @@
 부가서비스 / 광고 / 대시보드 | 이형진
 소셜 로그인 / 장바구니 / 알림 | 이수빈
 테스트코드 및 예외 | 공통사항
+
+## ERD
+<img width="1066" alt="Image" src="https://github.com/user-attachments/assets/9e0de846-6c0e-47a0-b9e0-08ce4ddd5d4a" />
+
+## API
+
