@@ -7,7 +7,7 @@ import org.example.delivery.domain.order.entity.OrderItem;
 @Getter
 @AllArgsConstructor
 public class OrderItemResponseDto {
-
+    private final Long itemId;
     private final String menuName;
     private final int quantity;
     private final int price;
@@ -15,6 +15,7 @@ public class OrderItemResponseDto {
 
     public static OrderItemResponseDto toDto(OrderItem item){
         return new OrderItemResponseDto(
+                item.getId(),
                 item.getMenuName(),
                 item.getQuantity(),
                 item.getPrice(),

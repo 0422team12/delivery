@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.cart.entity.Cart;
-import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,8 +32,8 @@ public class Order {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<OrderItem> orderItem;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItem = new ArrayList<>();
 
     private String address;
 
@@ -69,19 +69,21 @@ public class Order {
     }
 
 
-    public static Order of(Cart cart, Store store, List<OrderItem> orderItem, String address) {
+    public static Order of(Cart cart, Store store, String address) {
         Order order = new Order();
         order.user = cart.getUser();
         order.store = store;
-        order.orderItem = orderItem;
         order.address = address;
         order.status = Status.PENDING;
         order.orderedAt = LocalDateTime.now();
-        order.totalPrice=orderItem.stream().
-                mapToInt(item->item.getPrice()*item.getQuantity())
-                .sum();
         return order;
     }
-}
 
+    public void calculateTotalPrice(List<OrderItem> orderItems) {
+        this.totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            this.totalPrice += orderItem.getPrice() * orderItem.getQuantity();
+        }
+    }
+}
 
