@@ -29,7 +29,7 @@ public class ReviewController {
         return new ResponseEntity<>(createReview, HttpStatus.CREATED);
     }
     //내가 작성한 리뷰보기
-    @GetMapping("users/me/reviews")
+    @GetMapping("/users/me/reviews")
     public ResponseEntity<List<ReviewResponseDto>> findMyReviews(@RequestAttribute("userId") Long userId){
         List<ReviewResponseDto> findMyReviews = reviewService.findMyReviews(userId);
         if(findMyReviews.isEmpty()){

@@ -13,12 +13,11 @@ public class FilterConfig {
 
     private final JwtUtil jwtUtil;
 
-    private final UserRepository userRepository;
 
     @Bean
     public FilterRegistrationBean<JwtFilter> jwtFilter() {
         FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new JwtFilter(jwtUtil, userRepository));
+        registrationBean.setFilter(new JwtFilter(jwtUtil));
         registrationBean.addUrlPatterns("/*"); // 필터를 적용할 URL 패턴을 지정합니다.
 
         return registrationBean;
