@@ -1,20 +1,18 @@
 package org.example.delivery.config;
 
 import io.jsonwebtoken.Claims;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.common.JwtUtil;
-import org.example.delivery.domain.user.UserRepository;
-import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,11 +22,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-    private final UserRepository userRepository;
-
-    private static final List<String> WHITE_LIST = List.of(
-            "/auth/**"
-    );
+    private static final String[] WHITE_LIST = {
+            "/login",
+            "/signup",
+            "/login/kakao",
+            "/login/kakao/callback",
+            "/auth"
+    };
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -55,15 +55,6 @@ public class JwtFilter extends OncePerRequestFilter {
             throw new IllegalArgumentException("유효하지 않은 토큰");
         }
 
-        Long userId = jwtUtil.getUserIdFromToken(token);
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException());
-
-        if(user.getIsDeleted()) {
-            throw new EntityNotFoundException("비활성화 된 계정");
-        }
-
         Claims claims = jwtUtil.getClaims(token);
 
         UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
@@ -76,6 +67,6 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean isWhiteList(String requestURI) {
-        return PatternMatchUtils.simpleMatch(WHITE_LIST.toArray(new String[0]), requestURI);
+        return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }
 }
