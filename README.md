@@ -44,11 +44,32 @@
 ### 메뉴
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
-메뉴 생성 | POST | /stores/{storeId}/menus | {<br> ”menu” : “SignaturePizza”, ”price” : 28000, ”content” : “good” <br>} | {<br> "id": 1 ”menu” : “SignaturePizza”, ”price” : 28000, ”content” : “good” <br>} | 201 CREATED
-메뉴 수정 | PUT | /stores/{storeId}/menus/{menuId} | {<br> ”menu” : “SignaturePizza”, ”price” : 30000, ”content” : “good and tasty” <br>} | {<br> "id": 1, ”menu” : “SignaturePizza”, ”price” : 30000, ”content” : “good and tasty” <br>} | 200 OK
+메뉴 생성 | POST | /stores/{storeId}/menus | {<br> ”menu” : “SignaturePizza”,<br> ”price” : 28000,<br> ”content” : “good” <br>} | {<br> "id": 1 ”menu” : “SignaturePizza”,<br> ”price” : 28000,<br> ”content” : “good” <br>} | 201 CREATED
+메뉴 수정 | PUT | /stores/{storeId}/menus/{menuId} | {<br> ”menu” : “SignaturePizza”, <br>”price” : 30000,<br> ”content” : “good and tasty” <br>} | {<br> "id": 1,<br> ”menu” : “SignaturePizza”,<br> ”price” : 30000, <br>”content” : “good and tasty” <br>} | 200 OK
 메뉴 삭제 | DELETE | /stores/{storeId}/menus/{menuId} |   |   | 204 NO_CONTENT
 
 ### 카트
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
+카트 메뉴 추가 | POST | /carts/items | {   "menuId": 123,   "quantity": 2 } |   | 200 OK
+카트 조회 | GET | /carts |   | { ”storeId” : store_id, ”storeName” : “가게 이름”, ”items” : [   {     "cartItemId": 1,     "menuId": 123,     "menuName": "떡볶이",     "quantity": 2,     "priceSnapshot": 6000    }, /// ], "totalPrice": 12000 } | 200 OK
+카트 메뉴 수량 변경 | PUT | /carts/items/{cartItemId} | {   "quantity": 2 } |   | 200 OK
+카트 단일 메뉴 삭제 | DELETE | /carts/items/{cartItemId} |   |   | 200 OK
+카트 전체 삭제 | DELETE | /carts |   |   | 200 OK
+
 ### 주문
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
+주문(결제) | POST | /orders | { ”address”:주소 } | { "orderId": 1, "userId": 1234, "storeName": "Pizza Palace", "status": "PENDING", "items":[ { "itemId":1, "menuName":"메뉴1", "quantity":2, "price":3500, "totalPrice":quantity*price } totalPrice : 7000, "address": "대전광역시", "orderedAt":"2025-04-25", "deliveredAt": null } | 201 CREATED
+주문 조회 | GET | /orders/{orderId} |   | 위와 같음 | 200 OK
+주문 전체조회 | GET | /orders | {   "quantity": 2 } | [ { "orderId": 1, "storeId": 1, "storeName": "식당이름1", "menuName": "[메뉴1,메뉴2]", "totalPrice": 10000, "status": "PENDING", "orderedAt": "2025-04-25T18:53:02.636048" }, { "orderId": 2, "storeId": 2, "storeName": "식당이름2", "menuName": "[메뉴3,메뉴4]", "totalPrice": 10000, "status": "PENDING", "orderedAt": "2025-04-25T18:53:02.636048" } ] | 200 OK
+주문 수정 | PATCH | /orders/{orderId} |   | { "orderId": 1, "userId": 1234, "storeName": "Pizza Palace", "status": COOKING, "items":[ ….} | 200 OK
+주문 취소 | DELETE | /orders/{orderId} |   | orderStatus : PENDING→ CALCEL | 200 OK
+
 ### 리뷰
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
+
 ### 대시보드
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
