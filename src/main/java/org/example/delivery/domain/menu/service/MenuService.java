@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuCreateRequestDto;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
+import org.example.delivery.domain.menu.dto.MenuUpdateRequestDto;
 import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.menu.repository.MenuRepository;
 import org.example.delivery.domain.store.entity.Store;
@@ -20,7 +21,7 @@ public class MenuService {
     private final StoreRepository storeRepository;
 
     // 메뉴 생성 -> 로그인한 사장님만 가능, 가게 id에 할당해줘야함
-    public MenuResponseDto createMenu(Long storeId, String name, Long price, String content, HttpServletRequest request) {
+    public MenuResponseDto createMenu(Long storeId, MenuCreateRequestDto requestDto, HttpServletRequest request) {
 
         Long userId = (Long) request.getAttribute("userId");
 
@@ -31,7 +32,7 @@ public class MenuService {
             throw new IllegalArgumentException("접근 권한이 없습니다.");
         }
 
-        Menu menu = Menu.createMenu(store, name, price, content);
+        Menu menu = Menu.createMenu(store, requestDto.getName(), requestDto.getPrice(), requestDto.getContent());
 
         Menu savedMenu = menuRepository.save(menu);
 
@@ -41,7 +42,7 @@ public class MenuService {
 
     // 메뉴 수정
     @Transactional
-    public MenuResponseDto updateMenu(Long menuId, String name, Long price, String content, HttpServletRequest request) {
+    public MenuResponseDto updateMenu(Long menuId, MenuUpdateRequestDto requestDto, HttpServletRequest request) {
         // 1. 메뉴 id 받아와서 null 체크 후 정보 있으면 menu 가져옴
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
@@ -53,7 +54,7 @@ public class MenuService {
         }
 
         // 3. 메뉴 리퀘스트 받아온걸로 수정
-        menu.update(name, price, content);
+        menu.update(requestDto.getName(), requestDto.getPrice(), requestDto.getContent());
 
         Menu updated = menuRepository.save(menu);
 

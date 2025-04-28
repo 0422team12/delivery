@@ -26,11 +26,7 @@ public class MenuController {
             HttpServletRequest request
     ) {
         MenuResponseDto responseDto = menuService.createMenu(
-                storeId,
-                requestDto.getName(),
-                requestDto.getPrice(),
-                requestDto.getContent(),
-                request);
+                storeId, requestDto, request);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
@@ -42,11 +38,7 @@ public class MenuController {
             HttpServletRequest request
     ) {
         MenuResponseDto responseDto = menuService.updateMenu(
-                menuId,
-                requestDto.getName(),
-                requestDto.getPrice(),
-                requestDto.getContent(),
-                request);
+                menuId, requestDto, request);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
