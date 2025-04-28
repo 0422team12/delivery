@@ -35,7 +35,7 @@
 ### 가게
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
-가게 생성 | POST | /stores | { "name" : "zzangpizza", "openingTime" : "10:00", "closingTime": "22:00", "minOrderValue" : 30000 } | { "id": 1, "name":"zzangpizza", "openingTime" : "10:00", "closingTime": "22:00", "minOrderValue" : 30000 } | 201 CREATED
+가게 생성 | POST | /stores | { "name" : "zzangpizza",<br> "openingTime" : "10:00", "closingTime": "22:00", "minOrderValue" : 30000 } | { "id": 1, "name":"zzangpizza", "openingTime" : "10:00", "closingTime": "22:00", "minOrderValue" : 30000 } | 201 CREATED
 가게 검색 | GET | /stores |   | [ { "id": 1, "name": "zzangpizza", "openingTime": "10:00:00", "closingTime": "22:30:00", "minOrderValue": 30000 }, { "id": 2, "name": "goodpizza", "openingTime": "10:00:00", "closingTime": "22:00:00", "minOrderValue": 28000 }, ] | 200 OK
 가게 상세 | GET | /stores/{storeId} |   | { "id": 1, "name": "zzangpizza", "openingTime": "10:00:00", "closingTime": "22:30:00", "minOrderValue": 30000, "menuList": [ { "id": 1, "name": "SignaturePizza", "price": 28000, "content": "good" }, { "id": 2, "name": "SpicyPizza", "price": 26000, "content": "spicy" } ] } | 200 OK
 가게 수정 | PUT | /stores/{storeId} | { "name" : "zzangpizza2", "openingTime" : "10:00", "closingTime": "24:00", "minOrderValue" : 30000 } | { "name" : "zzangpizza2", "openingTime" : "10:00", "closingTime": "24:00", "minOrderValue" : 30000 } | 200 OK
