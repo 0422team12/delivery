@@ -35,13 +35,17 @@ public class JwtFilter extends OncePerRequestFilter {
         String bearerJwt = request.getHeader("Authorization");
 
         if (bearerJwt == null || !bearerJwt.startsWith("Bearer ")) { // 토큰이 비어있는지 확인
-            throw new IllegalArgumentException("토큰 없음");
+//            throw new IllegalArgumentException("토큰 없음");
+            chain.doFilter(request, response);
+            return;
         }
 
         String token = bearerJwt.substring(7);
 
         if(!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰");
+//            throw new IllegalArgumentException("유효하지 않은 토큰");
+            chain.doFilter(request, response);
+            return;
         }
 
         Claims claims = jwtUtil.getClaims(token);
