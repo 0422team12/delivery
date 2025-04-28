@@ -62,15 +62,15 @@
 -- | -- | -- | -- | -- | --
 주문(결제) | POST | /orders | { <br>”address”:주소 <br>} | { <br>"orderId": 1,<br> "userId": 1234,<br> "storeName": "Pizza Palace",<br> "status": "PENDING",<br> "items":[ { <br>"itemId":1, <br>"menuName":"메뉴1",<br> "quantity":2,<br> "price":3500,<br> "totalPrice":quantity*price<br> } <br>totalPrice : 7000, <br>"address": "대전광역시",<br> "orderedAt":"2025-04-25",<br> "deliveredAt": null<br> } | 201 CREATED
 주문 조회 | GET | /orders/{orderId} |   | 위와 같음 | 200 OK
-주문 전체조회 | GET | /orders | {  <br> "quantity": 2<br> } | [ { <br>"orderId": 1,<br> "storeId": 1,<br> "storeName": "식당이름1",<br> "menuName": "[메뉴1,메뉴2]", <br>"totalPrice": 10000,<br> "status": "PENDING",<br> "orderedAt": "2025-04-25T18:53:02.636048" <br>}, { <br>"orderId": 2,<br> "storeId": 2,<br> "storeName": "식당이름2", <br>"menuName": "[메뉴3,메뉴4]",<br> "totalPrice": 10000, <br>"status": "PENDING", <br>"orderedAt": "2025-04-25T18:53:02.636048"<br> } ] | 200 OK
-주문 수정 | PATCH | /orders/{orderId} |   | { <br>"orderId": 1,<br> "userId": 1234,<br> "storeName": "Pizza Palace", <br>"status": COOKING, <br>"items":[ ….<br>} | 200 OK
+주문 전체조회 | GET | /orders | {  <br> "quantity": 2<br> } | [ <br>{ <br>"orderId": 1,<br> "storeId": 1,<br> "storeName": "식당이름1",<br> "menuName": "[메뉴1,메뉴2]", <br>"totalPrice": 10000,<br> "status": "PENDING",<br> "orderedAt": "2025-04-25T18:53:02.636048" <br>}, { <br>"orderId": 2,<br> "storeId": 2,<br> "storeName": "식당이름2", <br>"menuName": "[메뉴3,메뉴4]",<br> "totalPrice": 10000, <br>"status": "PENDING", <br>"orderedAt": "2025-04-25T18:53:02.636048"<br> }<br> ] | 200 OK
+주문 수정 | PATCH | /orders/{orderId} |   | { <br>"orderId": 1,<br> "userId": 1234,<br> "storeName": "Pizza Palace", <br>"status": COOKING, <br>"items":<br>[<br> ….<br>} | 200 OK
 주문 취소 | DELETE | /orders/{orderId} |   | orderStatus : PENDING→ CALCEL | 200 OK
 
 ### 리뷰
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
 리뷰 작성 | POST | /orders/{orderId}/reviews | {<br> ”rating”:별점 <br>”content”:리뷰 <br>} | { <br>”reviewId”: 1,<br> ”storeName” : “가게명”, <br>”rating” : 5, <br>”content”: “맛있어요.”<br> ”createdAt”:”2025-04-25” <br>} | 201 CREATED
-내리뷰보기 | GET | /users/me/reviews |   | [ { <br>”reviewId”: 1,<br> ”storeName” : “가게명”, <br>”rating” : 5, <br>”content”: “맛있어요.” <br>”createdAt”:”2025-04-25” }, <br>{<br> ”reviewId”: 2, <br>”storeName” : “가게명2”, <br>”rating” : 1, <br>”content”: “맛없어요.”<br> ”createdAt”:”2025-04-25”<br> } ] | 200 OK
+내리뷰보기 | GET | /users/me/reviews |   | <br>[ <br>{ <br>”reviewId”: 1,<br> ”storeName” : “가게명”, <br>”rating” : 5, <br>”content”: “맛있어요.” <br>”createdAt”:”2025-04-25” }, <br>{<br> ”reviewId”: 2, <br>”storeName” : “가게명2”, <br>”rating” : 1, <br>”content”: “맛없어요.”<br> ”createdAt”:”2025-04-25”<br> } <br>] | 200 OK
 가게리뷰 조회 | GET | /stores/{storeId}/reviews |   | 위와 같음 | 200 OK
 가게리뷰 평점별로 조회 | GET | /stores/{storeId}/reviews", params = {"minRating", "maxRating"} |   | 위와 같음 | 200 OK
 리뷰 삭제 | DELETE | /reviews/{reviewId} |   |   | 200 OK
