@@ -69,7 +69,20 @@
 ### 리뷰
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
+리뷰작성 | POST | /orders/{orderId}/reviews | { ”rating”:별점 ”content”:리뷰 } | { ”reviewId”: 1, ”storeName” : “가게명”, ”rating” : 5, ”content”: “맛있어요.” ”createdAt”:”2025-04-25” } | 201 CREATED
+내리뷰보기 | GET | /users/me/reviews |   | [ { ”reviewId”: 1, ”storeName” : “가게명”, ”rating” : 5, ”content”: “맛있어요.” ”createdAt”:”2025-04-25” }, { ”reviewId”: 2, ”storeName” : “가게명2”, ”rating” : 1, ”content”: “맛없어요.” ”createdAt”:”2025-04-25” } ] | 200 OK
+가게리뷰조회 | GET | /stores/{storeId}/reviews |   | 위와 같음 | 200 OK
+가게리뷰평점별로조회 | GET | /stores/{storeId}/reviews", params = {"minRating", "maxRating"} |   | 위와 같음 | 200 OK
+리뷰삭제 | DELETE | /reviews/{reviewId} |   |   | 200 OK
 
 ### 대시보드
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
+대시보드 메인 | GET | /dashboard | {   “stores” : {      ”store1”: [       “(category)”, “(ads)”, “(sales), …”],     “store2”:[ … ] }} |   |  
+관리자 페이지 | GET | /admin |   |   | 200 OK
+가게 상세 | GET | /dashboard/{storeId} |   |   |  
+광고 조회 | GET | /dashboard/{storeId}/ads |   |   |  
+광고 생성 | POST | /dashboard/{storeId}/ads |   |   |  
+광고 편집 | PATCH | /dashboard/{storeId}/ads/{adId} |   |   |  
+광고 초기화 | DELETE | /dashboard/{storeId}/ads/ |   |   |  
+광고 삭제 | DELETE | /dashboard/{storeId}/ads/{adId} |   |   |  
