@@ -28,11 +28,16 @@ public class AuthService {
     }
 
     public LoginResponseDto login(String email, String password) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("이메일이 없음"));
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호");
+        }
+
+        if(user.getIsDeleted()) {
+            throw new IllegalArgumentException("비활성화된 계정");
         }
 
         String token = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
