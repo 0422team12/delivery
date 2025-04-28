@@ -76,7 +76,7 @@ public class KakaoAuthService {
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
         ResponseEntity<Map> response = restTemplate.exchange(
-                "https://kapi.kakao.com/v2/user/me",
+                KAKAO_USER_INFO_URI,
                 HttpMethod.GET,
                 request,
                 Map.class

@@ -46,11 +46,21 @@ public class Order {
     private LocalDateTime deliveredAt;
 
     public enum Status {
-        PENDING,
-        COOKING,
-        DELIVERING,
-        DELIVERED,
-        CANCELED;
+        PENDING("주문이 접수되었습니다."),
+        COOKING("주문이 준비 중입니다."),
+        DELIVERING("주문이 배송 중입니다."),
+        DELIVERED("주문이 배송되었습니다."),
+        CANCELED("주문이 취소되었습니다.");
+
+        private final String message;
+
+        Status(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 
     public void cancel() {
