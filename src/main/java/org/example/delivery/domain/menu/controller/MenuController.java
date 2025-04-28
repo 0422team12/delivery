@@ -23,10 +23,9 @@ public class MenuController {
     public ResponseEntity<MenuResponseDto> createMenu(
             @PathVariable Long storeId,
             @Valid @RequestBody MenuCreateRequestDto requestDto,
-            HttpServletRequest request
+            @RequestAttribute("userId") Long userId
     ) {
-        MenuResponseDto responseDto = menuService.createMenu(
-                storeId, requestDto, request);
+        MenuResponseDto responseDto = menuService.createMenu(storeId, requestDto, userId);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
@@ -35,10 +34,9 @@ public class MenuController {
     public ResponseEntity<MenuResponseDto> updateMenu(
             @PathVariable Long menuId,
             @Valid @RequestBody MenuUpdateRequestDto requestDto,
-            HttpServletRequest request
+            @RequestAttribute("userId") Long userId
     ) {
-        MenuResponseDto responseDto = menuService.updateMenu(
-                menuId, requestDto, request);
+        MenuResponseDto responseDto = menuService.updateMenu(menuId, requestDto, userId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -46,9 +44,9 @@ public class MenuController {
     @DeleteMapping("/{menuId}")
     public ResponseEntity<String> deleteMenu(
             @PathVariable Long menuId,
-            HttpServletRequest request
+            @RequestAttribute("userId") Long userId
     ) {
-        menuService.deleteMenu(menuId, request);
+        menuService.deleteMenu(menuId, userId);
         return new ResponseEntity<>("삭제 되었습니다.", HttpStatus.NO_CONTENT);
     }
 
