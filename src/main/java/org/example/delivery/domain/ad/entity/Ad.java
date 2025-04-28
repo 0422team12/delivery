@@ -1,7 +1,6 @@
 package org.example.delivery.domain.ad.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.store.entity.Store;
@@ -28,7 +27,7 @@ public class Ad {
 
     private Integer priority;
 
-    private boolean isActive;
+    private Boolean isActive;
 
     public Ad(Store store, LocalDateTime startAt, LocalDateTime endAt, Integer priority, boolean isActive){
         this.store = store;

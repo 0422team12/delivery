@@ -36,7 +36,7 @@ public class AdService {
         if (!userId.equals(store.getOwner().getId()))
             throw new OwnerMismatchException();
 
-        Ad ad = new Ad(store, dto.getStartAt(), dto.getEndAt(), dto.getPriority(), dto.isActive());
+        Ad ad = new Ad(store, dto.getStartAt(), dto.getEndAt(), dto.getPriority(), dto.getIsActive());
 
         adRepository.save(ad);
 
@@ -49,7 +49,7 @@ public class AdService {
 
         Ad ad = adRepository.findById(adId).orElseThrow(AdNotFoundException::new);
 
-        return new FindAdResponseDto(adId, storeId, ad.getStartAt(), ad.getEndAt(), ad.getPriority(), ad.isActive());
+        return new FindAdResponseDto(adId, storeId, ad.getStartAt(), ad.getEndAt(), ad.getPriority(), ad.getIsActive());
 
     }
 
@@ -60,7 +60,7 @@ public class AdService {
         LocalDateTime now = LocalDateTime.now();
 
         ads.removeIf(ad ->
-                (!ad.isActive() || ad.getStartAt().isBefore(now) || ad.getEndAt().isAfter(now)));
+                (!ad.getIsActive() || ad.getStartAt().isAfter(now) || ad.getEndAt().isBefore(now)));
 
         return ads.stream()
                 .sorted(Comparator.comparing(Ad::getPriority))

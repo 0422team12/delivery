@@ -1,8 +1,9 @@
 package org.example.delivery.domain.ad.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -10,15 +11,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ApplyAdRequestDto {
 
-    private long storeId;
-
+    @Min(0)
     private int priority;
 
+    @NotNull
     private LocalDateTime startAt;
 
+    @NotNull
     private LocalDateTime endAt;
 
-    private boolean isActive;
+    private Boolean isActive;
 
 
 }

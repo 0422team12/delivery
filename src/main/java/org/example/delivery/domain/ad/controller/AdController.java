@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.ad.dto.ApplyAdRequestDto;
 import org.example.delivery.domain.ad.dto.FindAdResponseDto;
 import org.example.delivery.domain.ad.service.AdService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class AdController {
             ){
         Long adId = adService.applyAd(userId, storeId, dto);
 
-        return ResponseEntity.ok(adId);
+        return new ResponseEntity<>(adId, HttpStatus.OK);
     }
 
     @GetMapping("/{adId}")
@@ -37,7 +38,7 @@ public class AdController {
     ){
         FindAdResponseDto resDto = adService.findOwnedAd(userId, storeId, adId);
 
-        return ResponseEntity.ok(resDto);
+        return new ResponseEntity<>(resDto, HttpStatus.OK);
     }
 
 }
