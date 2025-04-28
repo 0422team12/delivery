@@ -1,12 +1,13 @@
 package org.example.delivery.domain.store.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
 import org.example.delivery.domain.menu.entity.Menu;
+import org.example.delivery.domain.store.dto.StoreCreateRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
+import org.example.delivery.domain.store.dto.StoreUpdateRequestDto;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.store.repository.StoreRepository;
 import org.example.delivery.domain.user.UserRepository;
@@ -14,7 +15,6 @@ import org.example.delivery.domain.user.entity.User;
 import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,15 +26,11 @@ public class StoreService {
     private final UserRepository userRepository;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
-    public StoreResponseDto createStore(String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue, HttpServletRequest request) {
-
-        UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // userroll 추출
+    public StoreResponseDto createStore(StoreCreateRequestDto requestDto, Long userId, UserRole userRole) {
 
         if (userRole != UserRole.OWNER) {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 권한 있음
         }
-
-        Long userId = (Long) request.getAttribute("userId");
 
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -45,10 +41,10 @@ public class StoreService {
 
         Store store = Store.createStore(
                 owner,
-                name,
-                openingTime,
-                closingTime,
-                minOrderValue
+                requestDto.getName(),
+                requestDto.getOpeningTime(),
+                requestDto.getClosingTime(),
+                requestDto.getMinOrderValue()
         );
 
         Store saved = storeRepository.save(store);
@@ -102,9 +98,7 @@ public class StoreService {
 
     // 가게 수정
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue, HttpServletRequest request) {
-
-        Long userId = (Long) request.getAttribute("userId");
+    public StoreResponseDto updateStore(Long storeId, StoreUpdateRequestDto requestDto, Long userId) {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
@@ -113,7 +107,7 @@ public class StoreService {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 접근 가능
         }
 
-        store.update(name,openingTime,closingTime,minOrderValue);
+        store.update(requestDto.getName(), requestDto.getOpeningTime(), requestDto.getClosingTime(), requestDto.getMinOrderValue());
 
         Store updated = storeRepository.save(store);
 
@@ -122,9 +116,7 @@ public class StoreService {
 
     // 가게 삭제
     @Transactional
-    public void closeStore(Long storeId, HttpServletRequest request) {
-
-        Long userId = (Long) request.getAttribute("userId");
+    public void closeStore(Long storeId, Long userId) {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));

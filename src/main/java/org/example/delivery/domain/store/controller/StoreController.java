@@ -1,6 +1,5 @@
 package org.example.delivery.domain.store.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.store.dto.StoreCreateRequestDto;
@@ -8,6 +7,7 @@ import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.dto.StoreUpdateRequestDto;
 import org.example.delivery.domain.store.service.StoreService;
+import org.example.delivery.domain.user.enums.UserRole;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +25,13 @@ public class StoreController {
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
             @Valid @RequestBody StoreCreateRequestDto requestDto,
-            HttpServletRequest request
+            @RequestAttribute("userId") Long userId,
+            @RequestAttribute("userRole") UserRole userRole
     ){
         StoreResponseDto responseDto = storeService.createStore(
-                requestDto.getName(),
-                requestDto.getOpeningTime(),
-                requestDto.getClosingTime(),
-                requestDto.getMinOrderValue(),
-                request
+                requestDto,
+                userId,
+                userRole
         );
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED); //201
     }
@@ -59,15 +58,12 @@ public class StoreController {
     public ResponseEntity<StoreResponseDto> updateStore(
             @PathVariable Long storeId,
             @RequestBody StoreUpdateRequestDto requestDto,
-            HttpServletRequest request
+            @RequestAttribute("userId") Long userId
     ) {
         StoreResponseDto responseDto = storeService.updateStore(
                 storeId,
-                requestDto.getName(),
-                requestDto.getOpeningTime(),
-                requestDto.getClosingTime(),
-                requestDto.getMinOrderValue(),
-                request
+                requestDto,
+                userId
         );
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -76,9 +72,9 @@ public class StoreController {
     @DeleteMapping("/{storeId}")
     public ResponseEntity<String> closeStore(
             @PathVariable Long storeId,
-            HttpServletRequest request
+            @RequestAttribute("userId") Long userId
     ) {
-        storeService.closeStore(storeId, request);
+        storeService.closeStore(storeId, userId);
         return new ResponseEntity<>("삭제 되었습니다.", HttpStatus.NO_CONTENT);
     }
 
