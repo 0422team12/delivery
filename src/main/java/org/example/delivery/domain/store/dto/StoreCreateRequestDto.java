@@ -1,26 +1,28 @@
 package org.example.delivery.domain.store.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalTime;
 
 @Getter
 @RequiredArgsConstructor
-public class StoreRequestDto {
+public class StoreCreateRequestDto {
 
-    @NotBlank
+    @NotNull(message = "가게 이름을 입력해주세요.")
     private final String name; // 가게명
 
-    @NotNull
+    @NotNull(message = "운영 시작 시간을 입력해주세요.")
+    @DateTimeFormat(pattern = "HH:mm")
     private final LocalTime openingTime; // 오픈시간, 포맷팅 고민
 
-    @NotNull
+    @NotNull(message = "운영 종료 시각을 입력해주세요.")
+    @DateTimeFormat(pattern = "HH:mm")
     private final LocalTime closingTime; // 마감시간
 
-    @NotNull
+    @NotNull(message = "최소 주문 금액을 입력해주세요.")
     private final Long minOrderValue; // 최소주문금액
 
 }

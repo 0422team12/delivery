@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.delivery.domain.menu.entity.Menu;
 import org.example.delivery.domain.user.entity.User;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -36,28 +37,18 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Menu> menuList = new ArrayList<>();
 
-    public Store(User owner, String name, LocalTime openingTime, LocalTime closingTime, boolean isClosed, Long minOrderValue) {
+    public Store(User owner, String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue) {
         this.owner = owner;
         this.name = name;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
-        this.isClosed = isClosed;
         this.minOrderValue = minOrderValue;
     }
 
-    public void updateName(String name) {
+    public void update(String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue){
         this.name = name;
-    }
-
-    public void updateOpeningTime(LocalTime openingTime) {
         this.openingTime = openingTime;
-    }
-
-    public void updateClosingTime(LocalTime closingTime) {
         this.closingTime = closingTime;
-    }
-
-    public void updateMinOrderValue(Long minOrderValue) {
         this.minOrderValue = minOrderValue;
     }
 
@@ -67,6 +58,10 @@ public class Store {
 
     public boolean isOverMinOrderValue(Long totalPrice){
         return totalPrice >= this.minOrderValue;
+    }
+
+    public static Store createStore(User owner, String name, LocalTime openingTime, LocalTime closingTime, Long minOrderValue) {
+        return new Store(owner, name, openingTime, closingTime, minOrderValue);
     }
 
 }
