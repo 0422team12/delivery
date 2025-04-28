@@ -1,6 +1,6 @@
 # 아웃소싱 프로젝트 🛵💨
-아웃소싱 컨셉의 배달 어플리케이션 구현 프로젝트
-회원가입/로그인 및 가게, 메뉴, 주문, 리뷰 CRUD 기능을 제공합니다.
+아웃소싱 컨셉의 배달 어플리케이션 구현 프로젝트 <br>
+회원가입/로그인 및 가게, 메뉴, 주문, 리뷰 CRUD 기능을 제공합니다. <br>
 
 ## 🛠️ 개발 환경
 **IDE** : IntelliJ <br>
@@ -25,4 +25,9 @@
 <img width="1066" alt="Image" src="https://github.com/user-attachments/assets/9e0de846-6c0e-47a0-b9e0-08ce4ddd5d4a" />
 
 ## API
-
+### 회원관리
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
+회원가입 | POST | /auth/signup |   |   | 201 CREATED
+회원탈퇴 | DELETE | /auth/account |   |   | 200 OK
+로그인 | POST | /auth/login |   | {   “accessToken” : “(String \| Token)” } | 200 OK
