@@ -37,8 +37,8 @@
 -- | -- | -- | -- | -- | --
 가게 생성 | POST | /stores | { <br>"name" : "zzangpizza",<br> "openingTime" : "10:00", <br>"closingTime": "22:00", <br>"minOrderValue" : 30000 <br>} | {<br> "id": 1,<br> "name":"zzangpizza",<br> "openingTime" : "10:00",<br> "closingTime": "22:00", <br>"minOrderValue" : 30000 <br>} | 201 CREATED
 가게 검색 | GET | /stores |   | [<br> {<br> "id": 1,<br> "name": "zzangpizza",<br> "openingTime": "10:00:00",<br> "closingTime": "22:30:00", <br>"minOrderValue": 30000 }, <br>{ <br>"id": 2,<br> "name": "goodpizza", <br>"openingTime": "10:00:00",<br> "closingTime": "22:00:00",<br> "minOrderValue": 28000 <br>}, <br>] | 200 OK
-가게 상세 | GET | /stores/{storeId} |   | { "id": 1, "name": "zzangpizza", "openingTime": "10:00:00", "closingTime": "22:30:00", "minOrderValue": 30000, "menuList": [ { "id": 1, "name": "SignaturePizza", "price": 28000, "content": "good" }, { "id": 2, "name": "SpicyPizza", "price": 26000, "content": "spicy" } ] } | 200 OK
-가게 수정 | PUT | /stores/{storeId} | { "name" : "zzangpizza2", "openingTime" : "10:00", "closingTime": "24:00", "minOrderValue" : 30000 } | { "name" : "zzangpizza2", "openingTime" : "10:00", "closingTime": "24:00", "minOrderValue" : 30000 } | 200 OK
+가게 상세 | GET | /stores/{storeId} |   | { <br>"id": 1,<br> "name": "zzangpizza",<br> "openingTime": "10:00:00", <br>"closingTime": "22:30:00", <br>"minOrderValue": 30000,<br> "menuList": <br>[ <br>{ <br>"id": 1, <br>"name": "SignaturePizza",<br> "price": 28000,<br> "content": "good" <br>}, <br>{<br> "id": 2, <br>"name": "SpicyPizza", <br>"price": 26000, <br>"content": "spicy"<br> } <br>] <br>} | 200 OK
+가게 수정 | PUT | /stores/{storeId} | {<br> "name" : "zzangpizza2", <br>"openingTime" : "10:00",<br> "closingTime": "24:00",<br> "minOrderValue" : 30000 <br>}<br> | {<br> "name" : "zzangpizza2",<br> "openingTime" : "10:00", <br>"closingTime": "24:00",<br> "minOrderValue" : 30000 <br>} | 200 OK
 가게 삭제 | DELETE | /stores/{storeId} |   |   | 204 NO_CONTENT
 ### 메뉴
 ### 카트
