@@ -27,7 +27,8 @@ public class JwtFilter extends OncePerRequestFilter {
             "/signup",
             "/login/kakao",
             "/login/kakao/callback",
-            "/auth"
+            "/auth/login",
+            "/auth/signup"
     };
 
     @Override
