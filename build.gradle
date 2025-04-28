@@ -41,6 +41,8 @@ dependencies {
     // bcrypt
     implementation 'at.favre.lib:bcrypt:0.10.2'
 
+    // email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
