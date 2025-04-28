@@ -21,13 +21,27 @@
 소셜 로그인 / 장바구니 / 알림 | 이수빈
 테스트코드 및 예외 | 공통사항
 
-## ERD
+## ⛓️ ERD
 <img width="1066" alt="Image" src="https://github.com/user-attachments/assets/9e0de846-6c0e-47a0-b9e0-08ce4ddd5d4a" />
 
-## API
+## 🗒️　API
 ### 회원관리
 기능 | HTTP Method | URL | Request | Response | status
 -- | -- | -- | -- | -- | --
 회원가입 | POST | /auth/signup |   |   | 201 CREATED
 회원탈퇴 | DELETE | /auth/account |   |   | 200 OK
 로그인 | POST | /auth/login |   | {   “accessToken” : “(String \| Token)” } | 200 OK
+
+### 가게
+기능 | HTTP Method | URL | Request | Response | status
+-- | -- | -- | -- | -- | --
+가게 생성 | POST | /stores | { "name" : "zzangpizza", "openingTime" : "10:00", "closingTime": "22:00", "minOrderValue" : 30000 } | { "id": 1, "name":"zzangpizza", "openingTime" : "10:00", "closingTime": "22:00", "minOrderValue" : 30000 } | 201 CREATED
+가게 검색 | GET | /stores |   | [ { "id": 1, "name": "zzangpizza", "openingTime": "10:00:00", "closingTime": "22:30:00", "minOrderValue": 30000 }, { "id": 2, "name": "goodpizza", "openingTime": "10:00:00", "closingTime": "22:00:00", "minOrderValue": 28000 }, ] | 200 OK
+가게 상세 | GET | /stores/{storeId} |   | { "id": 1, "name": "zzangpizza", "openingTime": "10:00:00", "closingTime": "22:30:00", "minOrderValue": 30000, "menuList": [ { "id": 1, "name": "SignaturePizza", "price": 28000, "content": "good" }, { "id": 2, "name": "SpicyPizza", "price": 26000, "content": "spicy" } ] } | 200 OK
+가게 수정 | PUT | /stores/{storeId} | { "name" : "zzangpizza2", "openingTime" : "10:00", "closingTime": "24:00", "minOrderValue" : 30000 } | { "name" : "zzangpizza2", "openingTime" : "10:00", "closingTime": "24:00", "minOrderValue" : 30000 } | 200 OK
+가게 삭제 | DELETE | /stores/{storeId} |   |   | 204 NO_CONTENT
+### 메뉴
+### 카트
+### 주문
+### 리뷰
+### 대시보드
