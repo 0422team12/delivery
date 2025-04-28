@@ -3,9 +3,10 @@ package org.example.delivery.domain.store.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.delivery.domain.store.dto.StoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreCreateRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
+import org.example.delivery.domain.store.dto.StoreUpdateRequestDto;
 import org.example.delivery.domain.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class StoreController {
     // 가게 생성 post
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(
-            @Valid @RequestBody StoreRequestDto requestDto,
+            @Valid @RequestBody StoreCreateRequestDto requestDto,
             HttpServletRequest request
     ){
         StoreResponseDto responseDto = storeService.createStore(
@@ -54,10 +55,10 @@ public class StoreController {
 
 
     // 가게 수정
-    @PatchMapping("/{storeId}")
+    @PutMapping("/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(
             @PathVariable Long storeId,
-            @RequestBody StoreRequestDto requestDto,
+            @RequestBody StoreUpdateRequestDto requestDto,
             HttpServletRequest request
     ) {
         StoreResponseDto responseDto = storeService.updateStore(
@@ -70,7 +71,6 @@ public class StoreController {
         );
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-
 
     // 가게 삭제(폐업)
     @DeleteMapping("/{storeId}")

@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
 import org.example.delivery.domain.menu.entity.Menu;
-import org.example.delivery.domain.store.dto.StoreRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
 import org.example.delivery.domain.store.entity.Store;
@@ -115,21 +114,10 @@ public class StoreService {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 접근 가능
         }
 
-        if (name != null) {
-            store.updateName(name);
-        }
-
-        if (openingTime != null) {
-            store.updateOpeningTime(openingTime);
-        }
-
-        if (closingTime != null) {
-            store.updateClosingTime(closingTime);
-        }
-
-        if (minOrderValue != null) {
-            store.updateMinOrderValue(minOrderValue);
-        }
+        store.updateName(name);
+        store.updateOpeningTime(openingTime);
+        store.updateClosingTime(closingTime);
+        store.updateMinOrderValue(minOrderValue);
 
         Store updated = storeRepository.save(store);
 
