@@ -23,8 +23,8 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     private static final String[] WHITE_LIST = {
-            "/login",
-            "/signup",
+            "/auth/login",
+            "/auth/signup",
             "/login/kakao",
             "/login/kakao/callback",
             "/auth/login",
