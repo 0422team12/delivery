@@ -17,13 +17,13 @@ class StoreTest {
     void testIsOverMinOrderValueReturnTrue(){
         //given
         Long minOrderValue = 10000L;
-        Store store = new Store(
+        Store store = Store.createStore(
                 new User(),
                 "testStore",
                 LocalTime.of(10, 0),
                 LocalTime.of(19 , 0),
-                false,
-                minOrderValue);
+                minOrderValue
+        );
 
         Long totalPrice = 15000L;
 
@@ -37,13 +37,14 @@ class StoreTest {
     void testIsEqualMinOrderValueReturnTrue(){
         //given
         Long minOrderValue = 10000L;
-        Store store = new Store(
+        Store store = Store.createStore(
                 new User(),
                 "testStore",
                 LocalTime.of(10, 0),
                 LocalTime.of(19 , 0),
-                false,
-                minOrderValue);
+                minOrderValue
+        );
+
 
         //when
         //then
@@ -55,13 +56,14 @@ class StoreTest {
     void testIsNonOverMinOrderValueReturnFalse(){
         //given
         Long minOrderValue = 10000L;
-        Store store = new Store(
+        Store store = Store.createStore(
                 new User(),
                 "testStore",
                 LocalTime.of(10, 0),
                 LocalTime.of(19 , 0),
-                false,
-                minOrderValue);
+                minOrderValue
+        );
+
         Long totalPrice = 9999L;
 
         //when
