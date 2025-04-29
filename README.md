@@ -9,7 +9,7 @@
 **빌드 도구** : Gradle-Groovy <br>
 **언어** : Java 17 <br>
 **의존성** : Lombok / Spring Web / JDBC API / Spring Data JPA / MySQL Driver / Validation / Java Mail Sender <br>
-**테스트 도구** : Postman <br>
+**테스트 도구** : Postman / JUnit5 / Mockito <br>
 
 ## 🕺 역할 분담
 기능 | 담당
