@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuRequestDto;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
 import org.example.delivery.domain.menu.service.MenuService;
-import org.example.delivery.domain.store.dto.StoreRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
