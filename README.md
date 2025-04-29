@@ -11,6 +11,10 @@
 **의존성** : Lombok / Spring Web / JDBC API / Spring Data JPA / MySQL Driver / Validation / Java Mail Sender <br>
 **테스트 도구** : Postman <br>
 
+## 🛠️ 테스트 커버리지
+**Updated** : 2025/04/29
+<img width="1066" alt="Image" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FOzn7C%2FbtsND0xyFzW%2FMPosaYLBuDeXTRCgXMb1pK%2Fimg.png"/>
+
 ## 🕺 역할 분담
 기능 | 담당
 -- | --
@@ -18,7 +22,7 @@
 메뉴 / 가게 CRUD | 이진아
 주문 / 리뷰 CRUD | 류형철
 광고 / 전역 예외 | 이형진
-소셜 로그인 / 장바구니 / 알림 | 이수빈
+소셜 로그인 / 장바구니 / 주문 알림 | 이수빈
 테스트코드 및 예외 | 공통사항
 
 ## ⛓️ ERD
