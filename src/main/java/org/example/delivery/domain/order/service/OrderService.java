@@ -13,6 +13,9 @@ import org.example.delivery.domain.order.dto.response.OrderResponseDto;
 import org.example.delivery.domain.order.entity.Order;
 import org.example.delivery.domain.order.entity.OrderItem;
 
+import org.example.delivery.domain.order.exception.OrderBadRequestException;
+import org.example.delivery.domain.order.exception.OrderForbiddenException;
+import org.example.delivery.domain.order.exception.OrderNotFoundException;
 import org.example.delivery.domain.order.repository.OrderRepository;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.user.entity.User;
@@ -40,9 +43,7 @@ public class OrderService {
 
     @Transactional
     public OrderResponseDto createOrder(Long userId, String address) {
-        Cart cart = cartRepository.findByUserId(userId).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "장바구니를 찾을 수 없습니다."));
-
+        Cart cart = cartRepository.findByUserIdOrElseThrow(userId);
 
         List<CartItem> findAllByCart = cartItemRepository.findCartItemsByCartId(cart.getId());
         if (findAllByCart.isEmpty()) {
@@ -81,9 +82,9 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponseDto findOrder(Long userId, Long orderId) {
         Order order = orderRepository.findById(orderId).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."));
+                orElseThrow(() -> new OrderNotFoundException( "해당 주문을 찾을 수 없습니다."));
         if (!order.getUser().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인의 주문만 조회할 수 있습니다.");
+            throw new OrderForbiddenException("본인의 주문만 조회할 수 있습니다.");
         }
         return OrderResponseDto.toDto(order);
     }
@@ -92,7 +93,7 @@ public class OrderService {
     public List<FindAllOrderResponseDto> findAllOrders(Long userID) {
         List<Order> findAllByUserId = orderRepository.findAllByUserId(userID);
         if (findAllByUserId.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "주문한 이력이 없습니다.");
+            throw new OrderNotFoundException("주문한 이력이 없습니다.");
         }
         return findAllByUserId.stream().map(FindAllOrderResponseDto::toDto).toList();
     }
@@ -100,13 +101,13 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long userId, Long orderId) {
         Order order = orderRepository.findById(orderId).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문이 없습니다."));
+                orElseThrow(() -> new OrderNotFoundException( "해당 주문이 없습니다."));
 
         if (!order.getUser().getId().equals(userId)) { //로그인 user ,주문 user 일치확인
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 주문만 취소할 수 있습니다.");
+            throw new  OrderForbiddenException( "본인 주문만 취소할 수 있습니다.");
         }
         if (order.getStatus() != Order.Status.PENDING) { //주문상태 PENDING 일때만 취소가능
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "요청중인 주문만 취소할 수 있습니다.");
+            throw new OrderBadRequestException( "요청중인 주문만 취소할 수 있습니다.");
         }
         order.cancel();
     }
@@ -114,19 +115,19 @@ public class OrderService {
     @Transactional
     public OrderResponseDto updateOrder(Long userId, String userRole, Long orderId, String orderStatus) {
         Order order = orderRepository.findById(orderId).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문이 없습니다."));
+                orElseThrow(() -> new OrderNotFoundException( "해당 주문이 없습니다."));
         if (!UserRole.OWNER.name().equals(userRole)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "사장님만 주문 상태를 변경할 수 있습니다.");
+            throw new OrderForbiddenException(  "사장님만 주문 상태를 변경할 수 있습니다.");
         }
         if (!order.getStore().getOwner().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 가게 주문만 수정할 수 있습니다.");
+            throw new OrderForbiddenException(  "본인 가게 주문만 수정할 수 있습니다.");
         }
         try {
             order.updateStatus(orderStatus);
             User user = order.getUser();
             emailService.sendEmail(user.getEmail(),"배달앱 주문 알림", order.getStatus().getMessage());
         } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "유효하지 않은 주문 상태입니다.");
+            throw new OrderBadRequestException( "유효하지 않은 주문 상태입니다.");
         }
 
         log.info("로깅- 요청시각 : {},가게 ID : {},주문 ID : {}",
