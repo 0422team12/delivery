@@ -1,13 +1,13 @@
 package org.example.delivery.domain.store.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.delivery.domain.menu.dto.MenuResponseDto;
 import org.example.delivery.domain.menu.entity.Menu;
-import org.example.delivery.domain.store.dto.StoreRequestDto;
+import org.example.delivery.domain.store.dto.StoreCreateRequestDto;
 import org.example.delivery.domain.store.dto.StoreDetailResponseDto;
 import org.example.delivery.domain.store.dto.StoreResponseDto;
+import org.example.delivery.domain.store.dto.StoreUpdateRequestDto;
 import org.example.delivery.domain.store.entity.Store;
 import org.example.delivery.domain.store.repository.StoreRepository;
 import org.example.delivery.domain.user.UserRepository;
@@ -26,30 +26,26 @@ public class StoreService {
     private final UserRepository userRepository;
 
     // 가게 생성 서비스 => 사장만 생성 가능, 인당 최대 3가게까지 생성 가능
-    public StoreResponseDto createStore(StoreRequestDto requestDto, HttpServletRequest request) {
-
-        UserRole userRole = UserRole.valueOf((String) request.getAttribute("userRole")); // userroll 추출
+    public StoreResponseDto createStore(StoreCreateRequestDto requestDto, Long userId, UserRole userRole) {
 
         if (userRole != UserRole.OWNER) {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 권한 있음
         }
 
-        Long userId = (Long) request.getAttribute("userId");
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        if(storeRepository.countByOwner(owner) >= 3){
+        if(storeRepository.countByOwnerAndIsClosedFalse(owner) >= 3) {
             throw new IllegalArgumentException("가게는 최대 3개까지만 생성할 수 있습니다.");
         }
 
-        Store store = new Store(
+        Store store = Store.createStore(
                 owner,
                 requestDto.getName(),
                 requestDto.getOpeningTime(),
                 requestDto.getClosingTime(),
-                false,
                 requestDto.getMinOrderValue()
-        ); // 저장되어야 할 정보 : request로 받아온 가게이름,오픈시간,클로징시간,최소주문금액 & 사장님 이름(?? 어떻게 저장)
+        );
 
         Store saved = storeRepository.save(store);
 
@@ -74,7 +70,6 @@ public class StoreService {
     }
 
     // 가게 단건 조회
-    // todo : return시 메뉴리스트 추가해야함
     public StoreDetailResponseDto getStoreById(Long storeId) {
 
         Store store = storeRepository.findById(storeId)
@@ -103,9 +98,7 @@ public class StoreService {
 
     // 가게 수정
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, HttpServletRequest request, StoreRequestDto requestDto) {
-
-        Long userId = (Long) request.getAttribute("userId");
+    public StoreResponseDto updateStore(Long storeId, StoreUpdateRequestDto requestDto, Long userId) {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
@@ -114,21 +107,7 @@ public class StoreService {
             throw new IllegalArgumentException("접근 권한이 없습니다."); // 사장만 접근 가능
         }
 
-        if (requestDto.getName() != null) {
-            store.updateName(requestDto.getName());
-        }
-
-        if (requestDto.getOpeningTime() != null) {
-            store.updateOpeningTime(requestDto.getOpeningTime());
-        }
-
-        if (requestDto.getClosingTime() != null) {
-            store.updateClosingTime(requestDto.getClosingTime());
-        }
-
-        if (requestDto.getMinOrderValue() != null) {
-            store.updateMinOrderValue(requestDto.getMinOrderValue());
-        }
+        store.update(requestDto.getName(), requestDto.getOpeningTime(), requestDto.getClosingTime(), requestDto.getMinOrderValue());
 
         Store updated = storeRepository.save(store);
 
@@ -137,9 +116,7 @@ public class StoreService {
 
     // 가게 삭제
     @Transactional
-    public void closeStore(Long storeId, HttpServletRequest request) {
-
-        Long userId = (Long) request.getAttribute("userId");
+    public void closeStore(Long storeId, Long userId) {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalArgumentException("가게를 찾을 수 없습니다."));

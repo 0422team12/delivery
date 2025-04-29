@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    int countByOwner(User owner);
+    // int countByOwner(User owner);
+
+    int countByOwnerAndIsClosedFalse(User owner);
 
     List<Store> findAllByNameContainingAndIsClosedFalse(String name);
 
